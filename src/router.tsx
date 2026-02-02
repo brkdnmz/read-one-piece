@@ -6,7 +6,7 @@ import { routeTree } from "./routeTree.gen";
 // Create a new router instance
 export const getRouter = () => {
   const router = createRouter({
-    basepath: "/read-one-piece/",
+    // basepath: "/read-one-piece/",
     routeTree,
     scrollRestoration: true,
     defaultPreloadStaleTime: 0,
