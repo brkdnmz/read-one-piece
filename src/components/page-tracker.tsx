@@ -1,5 +1,6 @@
 import { getRouteApi } from "@tanstack/react-router";
 import { useAtom } from "jotai";
+import { PageSelector } from "./page-selector";
 import { currentPageAtom } from "@/store/store";
 import { useChapterPageCounQuery } from "@/hooks/use-chapter-page-count-query";
 
@@ -10,22 +11,32 @@ export function PageTracker() {
   // const { actualPageCount } = route.useLoaderData();
   const pageCountQuery = useChapterPageCounQuery(chapter);
 
-  const [currentPage] = useAtom(currentPageAtom);
+  const [currentPage, setCurrentPage] = useAtom(currentPageAtom);
 
   return (
-    <span className="text-sm tabular-nums">
-      <span className="inline-block w-[2ch] text-right">{currentPage}</span>/
-      {pageCountQuery.data ? (
-        pageCountQuery.data
-      ) : (
-        <span className="animate-pulse text-slate-400">...</span>
-      )}
+    <div className="flex items-center text-sm">
+      {/* <span className="inline-block w-[2ch] text-right">{currentPage}</span> */}
+      <PageSelector
+        currentPage={currentPage}
+        nPages={pageCountQuery.data ?? 10}
+        onChoosePage={(page) => {
+          setCurrentPage(page);
+        }}
+      />
+      /
+      <span className="w-[2ch]">
+        {pageCountQuery.data ? (
+          pageCountQuery.data
+        ) : (
+          <span className="animate-pulse text-slate-400">...</span>
+        )}
+      </span>
       {/* <Await
         promise={actualPageCount}
         fallback={<span className="animate-pulse text-slate-400">...</span>}
       >
         {(pageCount) => <span>{pageCount}</span>}
       </Await> */}
-    </span>
+    </div>
   );
 }

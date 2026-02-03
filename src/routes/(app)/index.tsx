@@ -16,11 +16,6 @@ export const Route = createFileRoute("/(app)/")({
   validateSearch: z.object({
     chapter: z.number().min(1).default(1).catch(1),
   }),
-  // loaderDeps: ({ search: { chapter } }) => ({ chapter }),
-  // loader: ({ deps: { chapter } }) => {
-  //   const pageCount = getChapterPageCount(chapter);
-  //   return { guessedPageCount: 10, actualPageCount: pageCount };
-  // },
 });
 
 function App() {
@@ -28,7 +23,6 @@ function App() {
   const { chapter: currentChapter } = Route.useSearch();
   const [currentPage, setCurrentPage] = useAtom(currentPageAtom);
   const [lang] = useAtom(languageAtom);
-  // const { guessedPageCount, actualPageCount } = Route.useLoaderData();
   const pageCountQuery = useChapterPageCounQuery(currentChapter);
 
   const swiperRef = useRef<SwiperRef>(null);
@@ -46,10 +40,14 @@ function App() {
     if (currentPage > 1) {
       swiperRef.current?.swiper.slidePrev();
     } else {
-      swiperRef.current?.swiper.slideTo(0);
-      navigate({
-        search: { chapter: currentChapter - 1 },
-      });
+      if (currentChapter === 1) return;
+
+      if (window.confirm("Go to previous chapter?")) {
+        swiperRef.current?.swiper.slideTo(0);
+        navigate({
+          search: { chapter: currentChapter - 1 },
+        });
+      }
     }
   };
 
@@ -59,15 +57,45 @@ function App() {
     if (!isLastPage) {
       swiperRef.current?.swiper.slideNext();
     } else {
-      swiperRef.current?.swiper.slideTo(0);
-      navigate({ search: { chapter: currentChapter + 1 } });
+      if (window.confirm("Go to next chapter?")) {
+        swiperRef.current?.swiper.slideTo(0);
+        navigate({ search: { chapter: currentChapter + 1 } });
+      }
     }
   };
 
+  // Enable/disable swiping depending on whether zoomed in or not (with a threshold of 0.1)
+  // Swiper seems to ignore the allowTouchMove prop after initialization, so I have to manually set it like this
+  useEffect(() => {
+    const onResize = () => {
+      const scale = window.visualViewport?.scale;
+      if (scale === undefined) return;
+      const swiper = swiperRef.current?.swiper;
+      if (swiper) swiper.allowTouchMove = scale <= 1.1;
+    };
+
+    window.visualViewport?.addEventListener("resize", onResize);
+
+    return () => {
+      window.visualViewport?.removeEventListener("resize", onResize);
+    };
+  }, []);
+
+  // Reset to page 1 when chapter changes
   useEffect(() => {
     swiperRef.current?.swiper.slideTo(0);
     setCurrentPage(1);
   }, [currentChapter]);
+
+  // Slide to the current page when it changes (e.g., via page selector)
+  // I think this will be unnecessarily called on slide changes too, but it's okay (I hope xd)
+  useEffect(() => {
+    swiperRef.current?.swiper.slideTo(currentPage - 1);
+  }, [currentPage]);
+
+  const allowInitialTouchMove =
+    window.visualViewport?.scale === undefined ||
+    window.visualViewport.scale <= 1.1;
 
   return (
     <>
@@ -83,8 +111,8 @@ function App() {
             className="h-full touch-auto!"
             modules={[Keyboard, Navigation]}
             keyboard
-            allowTouchMove={false}
-            lazyPreloadPrevNext={2}
+            allowTouchMove={allowInitialTouchMove}
+            // lazyPreloadPrevNext={2}
             onSlideChange={(swiper) => {
               setCurrentPage(swiper.activeIndex + 1);
             }}
