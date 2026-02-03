@@ -6,11 +6,12 @@ import { ChapterSelector } from "./chapter-selector";
 import { PageTracker } from "./page-tracker";
 import ChapterText from "/chapter-text-2.png";
 import PageText from "/page-text-2.png";
+import { LangSwitcher } from "./lang-switcher";
 
 export function Subheader() {
   return (
     <div>
-      <div className="flex items-stretch justify-center gap-4 font-[One_Piece] select-none">
+      <div className="flex items-stretch justify-center gap-3 font-[One_Piece] select-none">
         <div className="flex items-center gap-2">
           {/* "Chapter" text in One Piece style */}
           <img src={ChapterText} className="h-5" />
@@ -31,7 +32,11 @@ export function Subheader() {
           <PageTracker />
         </div>
 
-        <ThemeSwitcher />
+        <div className="flex items-center gap-1">
+          <ThemeSwitcher />
+
+          <LangSwitcher />
+        </div>
       </div>
 
       <NavigationDescription />

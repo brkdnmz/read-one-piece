@@ -6,7 +6,7 @@ import z from "zod";
 import { useAtom } from "jotai";
 import type { SwiperRef } from "swiper/react";
 import "swiper/swiper-bundle.css";
-import { currentPageAtom } from "@/store/store";
+import { currentPageAtom, languageAtom } from "@/store/store";
 import { getChapterPageUrl } from "@/api/util";
 import { useChapterPageCounQuery } from "@/hooks/use-chapter-page-count-query";
 import OnePieceGun from "/one-piece-gun.png";
@@ -27,6 +27,7 @@ function App() {
   const navigate = Route.useNavigate();
   const { chapter: currentChapter } = Route.useSearch();
   const [currentPage, setCurrentPage] = useAtom(currentPageAtom);
+  const [lang] = useAtom(languageAtom);
   // const { guessedPageCount, actualPageCount } = Route.useLoaderData();
   const pageCountQuery = useChapterPageCounQuery(currentChapter);
 
@@ -92,8 +93,8 @@ function App() {
               <SwiperSlide key={i}>
                 <div className="flex h-full w-full items-center justify-center select-none">
                   <img
-                    key={`chapter-${currentChapter}-page-${i + 1}`}
-                    src={getChapterPageUrl(currentChapter, i + 1)}
+                    key={`chapter-${currentChapter}-page-${i + 1}-${lang}`}
+                    src={getChapterPageUrl(currentChapter, i + 1, lang)}
                     alt={`Chapter ${currentChapter} Page ${i + 1}`}
                     className="h-0 min-h-full w-auto object-contain"
                     // loading="lazy"

@@ -16,6 +16,7 @@ export function ChapterSelector() {
         navigate({ to: "/", search: { chapter: selectedChapter } });
         // onChangeChapter(selectedChapter);
       }}
+      className="w-15 pr-0 pl-2"
     >
       {Array.from({ length: N_CHAPTERS }).map((_, i) => (
         <NativeSelectOption key={i} value={i + 1}>
