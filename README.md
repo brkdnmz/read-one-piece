@@ -1,5 +1,9 @@
 # Read One Piece
 
+<p align="center">
+  <img width="50%" alt="App screenshot" src="https://github.com/user-attachments/assets/31614bdc-03d4-4b1b-ba6b-2ed0ec055eca" />
+</p>
+
 The actual site I've used so far: https://ww12.readonepiece.com/
 
 What this app does differently is that it slides the pages left-to-right. I believe it provides a little better experience.
