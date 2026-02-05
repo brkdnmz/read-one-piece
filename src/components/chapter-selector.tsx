@@ -1,4 +1,5 @@
 import { getRouteApi, useNavigate } from "@tanstack/react-router";
+import { useMemo } from "react";
 import { NativeSelect, NativeSelectOption } from "./ui/native-select";
 import { N_CHAPTERS } from "@/constants";
 
@@ -8,20 +9,28 @@ export function ChapterSelector() {
   const navigate = useNavigate();
   const { chapter } = route.useSearch();
 
+  const options = useMemo(
+    () =>
+      Array.from({ length: N_CHAPTERS }).map((_, i) => ({
+        value: i + 1,
+        label: String(i + 1),
+      })),
+    [],
+  );
+
   return (
     <NativeSelect
       value={chapter}
       onChange={(e) => {
         const selectedChapter = Number(e.target.value);
         navigate({ to: "/", search: { chapter: selectedChapter } });
-        // onChangeChapter(selectedChapter);
       }}
       className="w-15 px-2 py-0 text-center"
       showArrow={false}
     >
-      {Array.from({ length: N_CHAPTERS }).map((_, i) => (
-        <NativeSelectOption key={i} value={i + 1}>
-          {i + 1}
+      {options.map(({ label, value }) => (
+        <NativeSelectOption key={value} value={value}>
+          {label}
         </NativeSelectOption>
       ))}
     </NativeSelect>
