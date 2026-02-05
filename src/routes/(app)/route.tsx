@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Header } from "@/components/header";
 import { Subheader } from "@/components/subheader";
+import { SwipingBlocked } from "@/components/swiping-blocked";
 
 export const Route = createFileRoute("/(app)")({
   component: RouteComponent,
@@ -21,6 +22,7 @@ function RouteComponent() {
             <Outlet />
           </main>
         </div>
+        <SwipingBlocked />
       </QueryClientProvider>
     </ThemeProvider>
   );

@@ -7,9 +7,9 @@ import type { ComponentProps } from "react";
 import type { SwiperClass, SwiperRef } from "swiper/react";
 import { useChapterPageCounQuery } from "@/hooks/use-chapter-page-count-query";
 import { currentPageAtom } from "@/store/store";
-
 import OnePieceGun from "/one-piece-gun.png";
 import { getChapterPageUrl } from "@/api/util";
+import { useCanSwipe } from "@/hooks/use-can-swipe";
 
 type Props = {
   chapter: number;
@@ -28,6 +28,8 @@ export function ChapterReader({
 }: Props) {
   const pageCountQuery = useChapterPageCounQuery(chapter);
   const [currentPage, setCurrentPage] = useAtom(currentPageAtom);
+  const canSwipe = useCanSwipe();
+
   const swiperRef = useRef<SwiperRef>(null);
 
   const pages = useMemo(
@@ -72,22 +74,10 @@ export function ChapterReader({
     }
   };
 
-  // Enable/disable swiping depending on whether zoomed in or not (with a threshold of 0.1)
-  // Swiper seems to ignore the allowTouchMove prop after initialization, so I have to manually set it like this
   useEffect(() => {
-    const onResize = () => {
-      const scale = window.visualViewport?.scale;
-      if (scale === undefined) return;
-      const swiper = swiperRef.current?.swiper;
-      if (swiper) swiper.allowTouchMove = scale <= 1.1;
-    };
-
-    window.visualViewport?.addEventListener("resize", onResize);
-
-    return () => {
-      window.visualViewport?.removeEventListener("resize", onResize);
-    };
-  }, []);
+    if (!swiperRef.current) return;
+    swiperRef.current.swiper.allowTouchMove = canSwipe;
+  }, [canSwipe]);
 
   // Reset to page 1 when chapter changes
   useEffect(() => {
