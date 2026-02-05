@@ -34,12 +34,12 @@ export function ChapterReader({
     () =>
       Array.from({ length: pageCountQuery.data ?? 10 }).map((_, pageIndex) => (
         <SwiperSlide key={pageIndex}>
-          <animated.div className="flex h-full w-full touch-none! items-center justify-center select-none">
+          <animated.div className="flex h-full w-full items-center justify-center select-none">
             <animated.img
               key={`chapter-${chapter}-page-${pageIndex + 1}-${lang}`}
               src={getChapterPageUrl(chapter, pageIndex + 1, lang)}
               alt={`Chapter ${chapter} Page ${pageIndex + 1}`}
-              className="origin-top touch-none object-contain max-sm:min-w-full md:h-0 md:min-h-full"
+              className="origin-top object-contain max-sm:min-w-full md:h-0 md:min-h-full"
               loading="lazy"
               draggable={false}
             />
