@@ -7,7 +7,7 @@ import viteTsConfigPaths from "vite-tsconfig-paths";
 import { tanstackRouter } from "@tanstack/router-vite-plugin";
 
 const config = defineConfig({
-  // base: "/read-one-piece/",
+  base: "/read-one-piece/",
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
