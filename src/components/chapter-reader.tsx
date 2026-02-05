@@ -1,14 +1,13 @@
 import { Keyboard, Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { animated } from "@react-spring/web";
 import { useEffect, useMemo, useRef } from "react";
 import { useAtom } from "jotai";
+import { ChapterPage } from "./chapter-page";
 import type { ComponentProps } from "react";
 import type { SwiperClass, SwiperRef } from "swiper/react";
 import { useChapterPageCounQuery } from "@/hooks/use-chapter-page-count-query";
 import { currentPageAtom } from "@/store/store";
 import OnePieceGun from "/one-piece-gun.png";
-import { getChapterPageUrl } from "@/api/util";
 import { useCanSwipe } from "@/hooks/use-can-swipe";
 
 type Props = {
@@ -36,19 +35,18 @@ export function ChapterReader({
     () =>
       Array.from({ length: pageCountQuery.data ?? 10 }).map((_, pageIndex) => (
         <SwiperSlide key={pageIndex}>
-          <animated.div className="flex h-full w-full items-center justify-center select-none">
-            <animated.img
-              key={`chapter-${chapter}-page-${pageIndex + 1}-${lang}`}
-              src={getChapterPageUrl(chapter, pageIndex + 1, lang)}
-              alt={`Chapter ${chapter} Page ${pageIndex + 1}`}
-              className="origin-top object-contain max-sm:min-w-full md:h-0 md:min-h-full"
-              loading="lazy"
-              draggable={false}
-            />
-          </animated.div>
+          <ChapterPage
+            chapter={chapter}
+            page={pageIndex + 1}
+            lang={lang}
+            onZoomChange={(isZoomedIn) => {
+              if (!swiperRef.current) return;
+              swiperRef.current.swiper.allowTouchMove = !isZoomedIn && canSwipe;
+            }}
+          />
         </SwiperSlide>
       )),
-    [chapter, lang, pageCountQuery.data],
+    [canSwipe, chapter, lang, pageCountQuery.data],
   );
 
   const onSlidePrevPage = () => {
