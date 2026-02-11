@@ -21,41 +21,6 @@ function App() {
 
   const swiperContainerRef = useRef<HTMLDivElement>(null);
 
-  // const bind = useDrag(
-  //   ({ tap, offset: [ox, oy] }) => {
-  //     console.log(ox, oy);
-
-  //     if (style.scale.get() === 1.5) {
-  //       api.start({ x: ox, y: oy, immediate: true });
-  //     }
-
-  //     if (tap) {
-  //       const now = Date.now();
-  //       if (now - lastTap.current < 300) {
-  //         const prevZoomedIn = style.scale.get() > 1;
-  //         if (!prevZoomedIn) {
-  //           api.start({ x: 0, y: 0, scale: 1.5 });
-  //         } else {
-  //           api.start({ x: 0, y: 0, scale: 1 });
-  //         }
-  //         if (swiperRef.current)
-  //           swiperRef.current.swiper.allowTouchMove = prevZoomedIn;
-  //         lastTap.current = 0;
-  //       } else lastTap.current = now;
-  //     }
-  //   },
-  //   {
-  //     // target: swiperContainerRef,
-  //     bounds: {
-  //       left: (-imgRef.current?.clientWidth * 0.5) / 2,
-  //       right: (imgRef.current?.clientWidth * 0.5) / 2,
-  //       top: -imgRef.current?.clientHeight * 0.5,
-  //       bottom: 0, // (swiperContainerRef.current?.clientHeight * 0.5) / 1.5,
-  //     },
-  //     from: () => [style.x.get(), style.y.get()],
-  //   },
-  // );
-
   return (
     <>
       {/* Without fallback, Await causes all components to disappear (Tanstack inserts "display: none" for some reason) */}
