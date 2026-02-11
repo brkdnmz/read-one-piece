@@ -102,7 +102,7 @@ export function ChapterReader({
         swiperProps?.onSlideChange?.(swiper);
       }}
       lazyPreloadPrevNext={2}
-      wrapperClass="will-change-[transform]" // this is game changer
+      wrapperClass="will-change-transform" // this is game changer
     >
       {pages}
 
