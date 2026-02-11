@@ -35,27 +35,21 @@ export const Route = createRootRoute({
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <head>
-        <HeadContent />
-      </head>
-
-      {/* Grammarly extension causes hydration issues */}
-      <body suppressHydrationWarning>
-        {children}
-        <TanStackDevtools
-          config={{
-            position: "bottom-right",
-          }}
-          plugins={[
-            {
-              name: "Tanstack Router",
-              render: <TanStackRouterDevtoolsPanel />,
-            },
-          ]}
-        />
-        <Scripts />
-      </body>
-    </html>
+    <>
+      <HeadContent />
+      {children}
+      <TanStackDevtools
+        config={{
+          position: "bottom-right",
+        }}
+        plugins={[
+          {
+            name: "Tanstack Router",
+            render: <TanStackRouterDevtoolsPanel />,
+          },
+        ]}
+      />
+      <Scripts />
+    </>
   );
 }
