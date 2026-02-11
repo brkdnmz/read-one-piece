@@ -1,6 +1,6 @@
 import { Keyboard, Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useAtom } from "jotai";
 import { ChapterPage } from "./chapter-page";
 import type { ComponentProps } from "react";
@@ -31,22 +31,21 @@ export function ChapterReader({
 
   const swiperRef = useRef<SwiperRef>(null);
 
-  const pages = useMemo(
-    () =>
-      Array.from({ length: pageCountQuery.data ?? 10 }).map((_, pageIndex) => (
-        <SwiperSlide key={pageIndex}>
-          <ChapterPage
-            chapter={chapter}
-            page={pageIndex + 1}
-            lang={lang}
-            onZoomChange={(isZoomedIn) => {
-              if (!swiperRef.current) return;
-              swiperRef.current.swiper.allowTouchMove = !isZoomedIn && canSwipe;
-            }}
-          />
-        </SwiperSlide>
-      )),
-    [canSwipe, chapter, lang, pageCountQuery.data],
+  // got annoyed by the useMemo warning, React Compiler does its job anyway
+  const pages = Array.from({ length: pageCountQuery.data ?? 10 }).map(
+    (_, pageIndex) => (
+      <SwiperSlide key={pageIndex}>
+        <ChapterPage
+          chapter={chapter}
+          page={pageIndex + 1}
+          lang={lang}
+          onZoomChange={(isZoomedIn) => {
+            if (!swiperRef.current) return;
+            swiperRef.current.swiper.allowTouchMove = !isZoomedIn && canSwipe;
+          }}
+        />
+      </SwiperSlide>
+    ),
   );
 
   const onSlidePrevPage = () => {
@@ -61,7 +60,8 @@ export function ChapterReader({
   };
 
   const onSlideNextPage = () => {
-    const isLastPage = currentPage === swiperRef.current?.swiper.slides.length;
+    // const isLastPage = currentPage === swiperRef.current?.swiper.slides.length;
+    const isLastPage = currentPage === pageCountQuery.data; // this is healthier
 
     if (!isLastPage) {
       swiperRef.current?.swiper.slideNext();
@@ -102,6 +102,7 @@ export function ChapterReader({
         swiperProps?.onSlideChange?.(swiper);
       }}
       lazyPreloadPrevNext={2}
+      wrapperClass="will-change-[transform]" // this is game changer
     >
       {pages}
 
