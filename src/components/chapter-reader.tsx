@@ -35,7 +35,7 @@ export function ChapterReader({
   // got annoyed by the useMemo warning, React Compiler does its job anyway
   const pages = Array.from({ length: pageCountQuery.data ?? 10 }).map(
     (_, pageIndex) => (
-      <SwiperSlide key={pageIndex}>
+      <SwiperSlide key={pageIndex} lazy>
         <ChapterPage
           chapter={chapter}
           page={pageIndex + 1}
