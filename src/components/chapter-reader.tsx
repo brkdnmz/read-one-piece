@@ -1,12 +1,12 @@
 import { Keyboard, Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useEffect, useRef } from "react";
-import { useAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
 import { ChapterPage } from "./chapter-page";
 import type { ComponentProps } from "react";
 import type { SwiperClass, SwiperRef } from "swiper/react";
 import { useChapterPageCounQuery } from "@/hooks/use-chapter-page-count-query";
-import { currentPageAtom } from "@/store/store";
+import { currentPageAtom, isZoomedInAtom } from "@/store/store";
 import OnePieceGun from "/one-piece-gun.png";
 import { useCanSwipe } from "@/hooks/use-can-swipe";
 
@@ -28,6 +28,7 @@ export function ChapterReader({
   const pageCountQuery = useChapterPageCounQuery(chapter);
   const [currentPage, setCurrentPage] = useAtom(currentPageAtom);
   const canSwipe = useCanSwipe();
+  const setIsZoomedIn = useSetAtom(isZoomedInAtom);
 
   const swiperRef = useRef<SwiperRef>(null);
 
@@ -41,7 +42,7 @@ export function ChapterReader({
           lang={lang}
           onZoomChange={(isZoomedIn) => {
             if (!swiperRef.current) return;
-            swiperRef.current.swiper.allowTouchMove = !isZoomedIn && canSwipe;
+            setIsZoomedIn(isZoomedIn);
           }}
         />
       </SwiperSlide>

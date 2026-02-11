@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { useEffect, useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 import { useCanSwipe } from "@/hooks/use-can-swipe";
 
 const SIZE = 40;
@@ -9,7 +9,7 @@ export function SwipingBlocked() {
   const canSwipe = useCanSwipe();
   const ref = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const onVisualViewportChange = () => {
       const vv = window.visualViewport;
       if (!vv) return;
@@ -45,7 +45,7 @@ export function SwipingBlocked() {
     <div
       ref={ref}
       className={clsx(
-        "pointer-events-none fixed z-100000 aspect-square rounded-full opacity-0 transition-opacity duration-500",
+        "pointer-events-none fixed z-100000 aspect-square rounded-full opacity-0 transition-opacity duration-250",
         !canSwipe && "opacity-100",
       )}
     >

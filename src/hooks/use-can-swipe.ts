@@ -1,25 +1,10 @@
-import { useEffect, useState } from "react";
-
-const SWIPE_ZOOM_THRESHOLD = 1.1;
+import { useAtomValue } from "jotai";
+import { useNativeZoom } from "./use-native-zoom";
+import { isZoomedInAtom } from "@/store/store";
 
 export function useCanSwipe() {
-  const [canSwipe, setCanSwipe] = useState(
-    (window.visualViewport?.scale ?? 0) <= SWIPE_ZOOM_THRESHOLD,
-  );
+  const isZoomedInNative = useNativeZoom();
+  const isZoomedIn = useAtomValue(isZoomedInAtom);
 
-  useEffect(() => {
-    const onResize = () => {
-      if (!window.visualViewport) return;
-      const scale = window.visualViewport.scale;
-      setCanSwipe(scale <= SWIPE_ZOOM_THRESHOLD);
-    };
-
-    window.visualViewport?.addEventListener("resize", onResize);
-
-    return () => {
-      window.visualViewport?.removeEventListener("resize", onResize);
-    };
-  }, []);
-
-  return canSwipe;
+  return !isZoomedInNative && !isZoomedIn;
 }
