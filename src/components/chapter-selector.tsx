@@ -1,7 +1,7 @@
 import { getRouteApi, useNavigate } from "@tanstack/react-router";
 import { useMemo } from "react";
 import { NativeSelect, NativeSelectOption } from "./ui/native-select";
-import { Button } from "./ui/button";
+import { GoToChapter } from "./go-to-chapter";
 import { N_CHAPTERS } from "@/constants";
 
 const route = getRouteApi("/(app)/");
@@ -19,40 +19,9 @@ export function ChapterSelector() {
     [],
   );
 
-  const onClickGoTo = () => {
-    let enteredValidChapter = false;
-
-    do {
-      const newChapter = window.prompt(
-        "Enter chapter number (1-" + N_CHAPTERS + "):",
-        chapter,
-      );
-
-      if (newChapter === null) break;
-
-      const selectedChapter = Number(newChapter);
-
-      if (
-        !isNaN(selectedChapter) &&
-        selectedChapter >= 1 &&
-        selectedChapter <= N_CHAPTERS
-      ) {
-        navigate({ to: "/", search: { chapter: selectedChapter } });
-        enteredValidChapter = true;
-      }
-    } while (!enteredValidChapter);
-  };
-
   return (
     <div className="relative">
-      <Button
-        className="absolute inset-x-0 top-full mt-1 h-fit py-1 text-center text-xs italic"
-        variant="secondary"
-        size="xs"
-        onClick={onClickGoTo}
-      >
-        Go to...
-      </Button>
+      <GoToChapter />
       <NativeSelect
         value={chapter}
         onChange={(e) => {

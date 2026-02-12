@@ -1,7 +1,8 @@
 // https://ui.shadcn.com/docs/dark-mode/vite
 // Had to change a little for a better code
 
-import { createContext, useContext, useEffect, useState } from "react";
+import { useLayoutEffect } from "@tanstack/react-router";
+import { createContext, useContext, useState } from "react";
 
 type Theme = "dark" | "light" | "system";
 
@@ -33,7 +34,7 @@ export function ThemeProvider({
     () => (localStorage.getItem(storageKey) as Theme | null) || defaultTheme,
   );
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const root = window.document.documentElement;
 
     root.classList.remove("light", "dark");
