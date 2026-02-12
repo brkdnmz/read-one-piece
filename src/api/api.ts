@@ -9,21 +9,22 @@ export async function getChapterPageCount(chapter: number): Promise<number> {
     return FIRST_CHAPTER_PAGES;
   }
 
-  const responses = await Promise.all(
-    Array.from({ length: MAX_PAGES_PER_CHAPTER }, (_, i) => {
-      const pageUrl = getChapterPageUrl(chapter, i + 1);
+  let l = 0;
+  let r = MAX_PAGES_PER_CHAPTER - 1;
 
-      // I don't want it to throw error for any status code
-      return apiClient.head(pageUrl, { validateStatus: () => true });
-    }),
-  );
+  while (l < r) {
+    const mid = Math.floor((l + r + 1) / 2);
+    const pageUrl = getChapterPageUrl(chapter, mid + 1);
 
-  // this is pretty fast enough, no need to binary search
-  for (let page = 0; page < MAX_PAGES_PER_CHAPTER; page++) {
-    if (responses[page].status === 404) {
-      return page;
+    // I don't want it to throw error for any status code
+    const res = await apiClient.head(pageUrl, { validateStatus: () => true });
+
+    if (res.status === 404) {
+      r = mid - 1;
+    } else {
+      l = mid;
     }
   }
 
-  return MAX_PAGES_PER_CHAPTER; // should not reach here, unless Odacchi surprises us
+  return l + 1;
 }

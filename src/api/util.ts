@@ -7,12 +7,17 @@ export function getChapterPageUrl(
 ): string {
   switch (lang) {
     case "en": {
-      const chapterSegment = `1${chapter.toString().padStart(4, "0")}000`;
+      // const chapterSegment = `1${chapter.toString().padStart(4, "0")}000`;
 
-      const url = new URL(
-        `/file/mangap/2/${chapterSegment}/${page}.jpeg`,
-        apiBaseUrl,
-      );
+      // const url = new URL(
+      //   `/file/mangap/2/${chapterSegment}/${page}.jpeg`,
+      //   apiBaseUrl,
+      // );
+
+      const url = new URL(apiBaseUrl);
+
+      url.searchParams.append("chapter", chapter.toString());
+      url.searchParams.append("page", page.toString());
 
       return url.toString();
     }
