@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from "react";
+import { useGesture } from "@use-gesture/react";
+import { isMobile } from "react-device-detect";
 import { getChapterPageUrl } from "@/api/util";
 import { cn } from "@/lib/utils";
 
@@ -18,6 +20,23 @@ export function ChapterPage({ chapter, page, lang, onZoomChange }: Props) {
 
   const imgContainerRef = useRef<HTMLDivElement>(null);
   const lastTapRef = useRef(0);
+
+  useGesture(
+    {
+      onDrag: ({ delta: [dx, dy], down }) => {
+        if (!isZoomedIn || !down) return;
+
+        imgContainerRef.current?.scrollBy({
+          left: -dx,
+          top: -dy,
+          behavior: "instant",
+        });
+      },
+    },
+    {
+      target: isMobile ? undefined : imgContainerRef,
+    },
+  );
 
   const onClickImage = (e: React.MouseEvent) => {
     // I handle double tap detection here
@@ -56,7 +75,7 @@ export function ChapterPage({ chapter, page, lang, onZoomChange }: Props) {
         ref={imgContainerRef}
         className={cn(
           "h-full overflow-auto max-sm:w-full",
-          isZoomedIn && "overscroll-none", // disable pull-to-refresh when zoomed in
+          isZoomedIn && "cursor-move overscroll-none", // disable pull-to-refresh when zoomed in
         )}
         onClick={onClickImage}
       >
