@@ -27,17 +27,18 @@ export function ChapterSelector() {
         "Enter chapter number (1-" + N_CHAPTERS + "):",
         chapter,
       );
-      if (newChapter) {
-        const selectedChapter = Number(newChapter);
 
-        if (
-          !isNaN(selectedChapter) &&
-          selectedChapter >= 1 &&
-          selectedChapter <= N_CHAPTERS
-        ) {
-          navigate({ to: "/", search: { chapter: selectedChapter } });
-          enteredValidChapter = true;
-        }
+      if (newChapter === null) break;
+
+      const selectedChapter = Number(newChapter);
+
+      if (
+        !isNaN(selectedChapter) &&
+        selectedChapter >= 1 &&
+        selectedChapter <= N_CHAPTERS
+      ) {
+        navigate({ to: "/", search: { chapter: selectedChapter } });
+        enteredValidChapter = true;
       }
     } while (!enteredValidChapter);
   };
