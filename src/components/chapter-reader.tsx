@@ -1,4 +1,4 @@
-import { Keyboard, Navigation } from "swiper/modules";
+import { Keyboard, Navigation, Virtual } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useEffect, useRef } from "react";
 import { useAtom, useSetAtom } from "jotai";
@@ -35,7 +35,7 @@ export function ChapterReader({
   // got annoyed by the useMemo warning, React Compiler does its job anyway
   const pages = Array.from({ length: pageCountQuery.data ?? 10 }).map(
     (_, pageIndex) => (
-      <SwiperSlide key={pageIndex} lazy>
+      <SwiperSlide key={pageIndex} lazy virtualIndex={pageIndex}>
         <ChapterPage
           chapter={chapter}
           page={pageIndex + 1}
@@ -94,8 +94,12 @@ export function ChapterReader({
     <Swiper
       ref={swiperRef}
       className="h-full touch-auto!"
-      modules={[Keyboard, Navigation]}
+      modules={[Keyboard, Navigation, Virtual]}
       keyboard
+      virtual={{
+        addSlidesBefore: 3,
+        addSlidesAfter: 3,
+      }}
       allowTouchMove // always allow touch move initially (beware that it seems that it is only used on initialization)
       {...swiperProps}
       onSlideChange={(swiper) => {
