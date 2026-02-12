@@ -10,7 +10,8 @@ import { LangSwitcher } from "./lang-switcher";
 
 export function Subheader() {
   return (
-    <div>
+    /* Gap for "Go to..." button */
+    <div className="grid gap-8">
       <div className="flex items-stretch justify-center gap-3 font-[One_Piece] select-none">
         <div className="flex items-center gap-2">
           {/* "Chapter" text in One Piece style */}
