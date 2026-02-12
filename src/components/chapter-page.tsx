@@ -83,7 +83,7 @@ export function ChapterPage({ chapter, page, lang, onZoomChange }: Props) {
           key={`chapter-${chapter}-page-${page}-${lang}`}
           src={getChapterPageUrl(chapter, page, lang)}
           alt={`Chapter ${chapter} Page ${page}`}
-          className="h-0 min-h-full object-contain"
+          className="m-auto h-0 min-h-full object-contain"
           style={{
             minHeight: isZoomedIn ? `${SCALE_FACTOR * 100}%` : undefined,
             minWidth: isZoomedIn ? `${SCALE_FACTOR * 100}%` : undefined,

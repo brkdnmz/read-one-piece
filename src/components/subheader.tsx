@@ -7,6 +7,7 @@ import { PageTracker } from "./page-tracker";
 import ChapterText from "/chapter-text-2.png";
 import PageText from "/page-text-2.png";
 import { LangSwitcher } from "./lang-switcher";
+import { Credits } from "./credits";
 
 export function Subheader() {
   return (
@@ -40,7 +41,11 @@ export function Subheader() {
         </div>
       </div>
 
-      <NavigationDescription />
+      <div>
+        <NavigationDescription />
+
+        <Credits />
+      </div>
     </div>
   );
 }
