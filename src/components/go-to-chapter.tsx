@@ -9,7 +9,7 @@ import {
   InputGroupButton,
   InputGroupInput,
 } from "./ui/input-group";
-import type { ChangeEventHandler } from "react";
+import type { ChangeEventHandler, FormEventHandler } from "react";
 import { N_CHAPTERS } from "@/constants";
 import OnePieceGun from "/one-piece-gun.png";
 
@@ -28,7 +28,8 @@ export function GoToChapter() {
     setNewChapterInput(input);
   };
 
-  const onSubmit = () => {
+  const onSubmit: FormEventHandler = (e) => {
+    e.preventDefault();
     if (!newChapterInput) return;
     const newChapter = Number(newChapterInput);
     if (newChapter >= 1 && newChapter <= N_CHAPTERS) {
@@ -56,28 +57,26 @@ export function GoToChapter() {
       </DialogTrigger>
       <DialogContent aria-describedby={undefined}>
         <DialogTitle>Go to...</DialogTitle>
-        <Field>
-          <FieldLabel htmlFor="new-chapter-input">
-            Chapter (1 - {N_CHAPTERS})
-          </FieldLabel>
-          <InputGroup>
-            <InputGroupInput
-              id="new-chapter-input"
-              inputMode="numeric"
-              value={newChapterInput}
-              onChange={onChangeInput}
-            />
-            <InputGroupAddon align="inline-end">
-              <InputGroupButton
-                size="icon-sm"
-                variant="ghost"
-                onClick={onSubmit}
-              >
-                <img src={OnePieceGun} alt="Go" className="rotate-y-180" />
-              </InputGroupButton>
-            </InputGroupAddon>
-          </InputGroup>
-        </Field>
+        <form onSubmit={onSubmit}>
+          <Field>
+            <FieldLabel htmlFor="new-chapter-input">
+              Chapter (1 - {N_CHAPTERS})
+            </FieldLabel>
+            <InputGroup>
+              <InputGroupInput
+                id="new-chapter-input"
+                inputMode="numeric"
+                value={newChapterInput}
+                onChange={onChangeInput}
+              />
+              <InputGroupAddon align="inline-end">
+                <InputGroupButton size="icon-sm" variant="ghost" type="submit">
+                  <img src={OnePieceGun} alt="Go" className="rotate-y-180" />
+                </InputGroupButton>
+              </InputGroupAddon>
+            </InputGroup>
+          </Field>
+        </form>
       </DialogContent>
     </Dialog>
   );
