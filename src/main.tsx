@@ -5,6 +5,12 @@ import { getRouter } from "./router";
 
 const router = getRouter();
 
+declare module "@tanstack/react-router" {
+  interface Register {
+    router: typeof router;
+  }
+}
+
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <RouterProvider router={router} />
