@@ -1,8 +1,6 @@
 import { apiClient } from "./client";
 import { getChapterPageUrl } from "./util";
-
-export const FIRST_CHAPTER_PAGES = 57;
-export const MAX_PAGES_PER_CHAPTER = 30;
+import { FIRST_CHAPTER_PAGES, MAX_PAGES_PER_CHAPTER } from "@/constants";
 
 export async function getChapterPageCount(chapter: number): Promise<number> {
   if (chapter === 1) {

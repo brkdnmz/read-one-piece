@@ -1,17 +1,23 @@
 import { Keyboard, Navigation, Virtual } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useEffect, useRef } from "react";
-import { useAtom, useSetAtom } from "jotai";
+import { getRouteApi } from "@tanstack/react-router";
+import { useSetAtom } from "jotai";
 import { ChapterPage } from "./chapter-page";
-import type { ComponentProps } from "react";
+import type { SwiperEvents } from "swiper/types";
 import type { SwiperClass, SwiperRef } from "swiper/react";
+import type { ComponentProps } from "react";
 import { useChapterPageCounQuery } from "@/hooks/use-chapter-page-count-query";
-import { currentPageAtom, isZoomedInAtom } from "@/store/store";
+import { isZoomedInAtom } from "@/store/store";
 import OnePieceGun from "/one-piece-gun.png";
 import { useCanSwipe } from "@/hooks/use-can-swipe";
+import { getMaxPagesForChapter } from "@/lib/utils";
+
+const route = getRouteApi("/(app)/");
 
 type Props = {
   chapter: number;
+  currentPage?: number;
   lang: "en" | "tr";
   swiperProps?: Pick<ComponentProps<typeof Swiper>, "onSlideChange">;
   onSlidePrevFirstPage?: (swiper: SwiperClass) => void;
@@ -20,34 +26,35 @@ type Props = {
 
 export function ChapterReader({
   chapter,
+  currentPage = 1,
   lang,
   swiperProps,
   onSlidePrevFirstPage,
   onSlideNextLastPage,
 }: Props) {
+  const navigate = route.useNavigate();
   const pageCountQuery = useChapterPageCounQuery(chapter);
-  const [currentPage, setCurrentPage] = useAtom(currentPageAtom);
   const canSwipe = useCanSwipe();
   const setIsZoomedIn = useSetAtom(isZoomedInAtom);
 
   const swiperRef = useRef<SwiperRef>(null);
 
   // got annoyed by the useMemo warning, React Compiler does its job anyway
-  const pages = Array.from({ length: pageCountQuery.data ?? 10 }).map(
-    (_, pageIndex) => (
-      <SwiperSlide key={pageIndex} lazy virtualIndex={pageIndex}>
-        <ChapterPage
-          chapter={chapter}
-          page={pageIndex + 1}
-          lang={lang}
-          onZoomChange={(isZoomedIn) => {
-            if (!swiperRef.current) return;
-            setIsZoomedIn(isZoomedIn);
-          }}
-        />
-      </SwiperSlide>
-    ),
-  );
+  const pages = Array.from({
+    length: pageCountQuery.data ?? getMaxPagesForChapter(chapter),
+  }).map((_, pageIndex) => (
+    <SwiperSlide key={pageIndex} lazy virtualIndex={pageIndex}>
+      <ChapterPage
+        chapter={chapter}
+        page={pageIndex + 1}
+        lang={lang}
+        onZoomChange={(isZoomedIn) => {
+          if (!swiperRef.current) return;
+          setIsZoomedIn(isZoomedIn);
+        }}
+      />
+    </SwiperSlide>
+  ));
 
   const onSlidePrevPage = () => {
     if (currentPage > 1) {
@@ -73,16 +80,19 @@ export function ChapterReader({
     }
   };
 
+  // Swiping is out of my control, I have to synchronize the search param this way I think
+  const onSlideChange: SwiperEvents["slideChange"] = (swiper) => {
+    navigate({
+      search: (prev) => ({ ...prev, page: swiper.activeIndex + 1 }),
+      replace: true, // more performant
+    });
+    swiperProps?.onSlideChange?.(swiper);
+  };
+
   useEffect(() => {
     if (!swiperRef.current) return;
     swiperRef.current.swiper.allowTouchMove = canSwipe;
   }, [canSwipe]);
-
-  // Reset to page 1 when chapter changes
-  useEffect(() => {
-    swiperRef.current?.swiper.slideTo(0);
-    setCurrentPage(1);
-  }, [chapter, setCurrentPage]);
 
   // Slide to the current page when it changes (e.g., via page selector)
   // I think this will be unnecessarily called on slide changes too, but it's okay (I hope xd)
@@ -92,22 +102,20 @@ export function ChapterReader({
 
   return (
     <Swiper
+      {...swiperProps}
       ref={swiperRef}
-      className="h-full touch-auto!"
+      initialSlide={currentPage - 1}
+      lazyPreloadPrevNext={2}
+      allowTouchMove // always allow touch move initially (beware that it seems that it is only used on initialization)
       modules={[Keyboard, Navigation, Virtual]}
       keyboard
       virtual={{
         addSlidesBefore: 3,
         addSlidesAfter: 3,
       }}
-      allowTouchMove // always allow touch move initially (beware that it seems that it is only used on initialization)
-      {...swiperProps}
-      onSlideChange={(swiper) => {
-        setCurrentPage(swiper.activeIndex + 1);
-        swiperProps?.onSlideChange?.(swiper);
-      }}
-      lazyPreloadPrevNext={2}
+      className="h-full touch-auto!"
       wrapperClass="will-change-transform" // this is game changer
+      onSlideChange={onSlideChange}
     >
       {pages}
 

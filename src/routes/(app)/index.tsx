@@ -11,12 +11,13 @@ export const Route = createFileRoute("/(app)/")({
   component: App,
   validateSearch: z.object({
     chapter: z.number().min(1).default(1).catch(1),
+    page: z.number().min(1).default(1).catch(1),
   }),
 });
 
 function App() {
+  const { chapter, page } = Route.useSearch();
   const navigate = Route.useNavigate();
-  const { chapter: currentChapter } = Route.useSearch();
   const lang = useAtomValue(languageAtom);
 
   const swiperContainerRef = useRef<HTMLDivElement>(null);
@@ -34,21 +35,20 @@ function App() {
           className={clsx("relative w-full flex-1")}
         >
           <ChapterReader
-            chapter={currentChapter}
+            chapter={chapter}
+            currentPage={page}
             lang={lang}
-            onSlidePrevFirstPage={(swiper) => {
+            onSlidePrevFirstPage={() => {
               if (window.confirm("Go to previous chapter?")) {
-                swiper.slideTo(0);
                 navigate({
-                  search: { chapter: currentChapter - 1 },
+                  search: { chapter: chapter - 1, page: 1 },
                 });
               }
             }}
-            onSlideNextLastPage={(swiper) => {
+            onSlideNextLastPage={() => {
               if (window.confirm("Go to next chapter?")) {
-                swiper.slideTo(0);
                 navigate({
-                  search: { chapter: currentChapter + 1 },
+                  search: { chapter: chapter + 1, page: 1 },
                 });
               }
             }}
