@@ -1,6 +1,7 @@
 import { useAtom } from "jotai";
 import { Button } from "./ui/button";
 import { languageAtom } from "@/store/store";
+import { MangaLanguage } from "@/types";
 
 export function LangSwitcher() {
   const [lang, setLang] = useAtom(languageAtom);
@@ -9,10 +10,12 @@ export function LangSwitcher() {
     <Button
       variant="outline"
       size="icon"
-      onClick={() => setLang(lang === "en" ? "tr" : "en")}
+      onClick={() =>
+        setLang(lang === MangaLanguage.EN ? MangaLanguage.TR : MangaLanguage.EN)
+      }
       title="Switch theme"
     >
-      {lang === "en" ? "🇬🇧" : "🇹🇷"}
+      {lang === MangaLanguage.EN ? "🇬🇧" : "🇹🇷"}
     </Button>
   );
 }

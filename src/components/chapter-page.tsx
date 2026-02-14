@@ -1,13 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import { useGesture } from "@use-gesture/react";
 import { isMobile } from "react-device-detect";
+import type { MangaLanguage } from "@/types";
 import { getChapterPageUrl } from "@/api/util";
 import { cn } from "@/lib/utils";
 
 type Props = {
   chapter: number;
   page: number;
-  lang: "en" | "tr";
+  lang: MangaLanguage;
   onZoomChange?: (isZoomedIn: boolean) => void;
 };
 

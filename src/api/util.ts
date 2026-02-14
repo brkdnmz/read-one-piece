@@ -1,12 +1,13 @@
 import { apiBaseUrl } from "./client";
+import { MangaLanguage } from "@/types";
 
 export function getChapterPageUrl(
   chapter: number,
   page: number,
-  lang: "tr" | "en" = "en",
+  lang: MangaLanguage = MangaLanguage.EN,
 ): string {
   switch (lang) {
-    case "en": {
+    case MangaLanguage.EN: {
       // const chapterSegment = `1${chapter.toString().padStart(4, "0")}000`;
 
       // const url = new URL(
@@ -22,7 +23,7 @@ export function getChapterPageUrl(
       return url.toString();
     }
 
-    case "tr": {
+    case MangaLanguage.TR: {
       // https://mangadenizi.net/uploads/manga/one-piece-renkli/chapters/0479/03.webp
       // https://mangadenizi.net/uploads/manga/one-piece-renkli/chapters/667/03.webp
       if (chapter <= 838) {

@@ -7,6 +7,7 @@ import { ChapterPage } from "./chapter-page";
 import type { SwiperEvents } from "swiper/types";
 import type { SwiperClass, SwiperRef } from "swiper/react";
 import type { ComponentProps } from "react";
+import type { MangaLanguage } from "@/types";
 import { useChapterPageCounQuery } from "@/hooks/use-chapter-page-count-query";
 import { isZoomedInAtom } from "@/store/store";
 import OnePieceGun from "/one-piece-gun.png";
@@ -18,7 +19,7 @@ const route = getRouteApi("/(app)/");
 type Props = {
   chapter: number;
   currentPage?: number;
-  lang: "en" | "tr";
+  lang: MangaLanguage;
   swiperProps?: Pick<ComponentProps<typeof Swiper>, "onSlideChange">;
   onSlidePrevFirstPage?: (swiper: SwiperClass) => void;
   onSlideNextLastPage?: (swiper: SwiperClass) => void;
