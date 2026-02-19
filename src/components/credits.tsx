@@ -8,8 +8,16 @@ export function Credits() {
         className="underline"
       >
         mangabolt.com
-      </a>
-      )
+      </a>{" "}
+      (en) and{" "}
+      <a
+        href="https://www.mangadenizi.net/manga/one-piece"
+        target="_blank"
+        className="underline"
+      >
+        mangadenizi.net
+      </a>{" "}
+      (tr))
     </div>
   );
 }
