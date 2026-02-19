@@ -1,7 +1,7 @@
 # Read One Piece
 
 <p align="center">
-  <img width="50%" alt="App screenshot" src="https://github.com/user-attachments/assets/31614bdc-03d4-4b1b-ba6b-2ed0ec055eca" />
+  <img width="50%" alt="App screenshot" src="https://github.com/user-attachments/assets/8c9902e8-c8a4-4722-ad89-7451ddf58f19" />
 </p>
 
 The actual site I've used so far: https://ww12.readonepiece.com/
