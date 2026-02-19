@@ -1,14 +1,35 @@
 <!doctype html>
-<html class="dark" lang="en">
-
-<head>
+<html lang="en">
+  <head>
     <meta charset="UTF-8" />
     <link rel="stylesheet" href="/src/styles.css" />
-</head>
 
-<body>
+    <script>
+      // https://github.com/TanStack/tanstack.com/blob/main/src/routes/__root.tsx#L99C20-L99C449
+      (function () {
+        try {
+          var t = localStorage.getItem("vite-ui-theme") || "auto";
+          var v = ["light", "dark", "auto"].includes(t) ? t : "auto";
+          if (v === "auto") {
+            var a = matchMedia("(prefers-color-scheme: dark)").matches
+              ? "dark"
+              : "light";
+            document.documentElement.classList.add(a, "auto");
+          } else {
+            document.documentElement.classList.add(v);
+          }
+        } catch (e) {
+          var a = matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light";
+          document.documentElement.classList.add(a, "auto");
+        }
+      })();
+    </script>
+  </head>
+
+  <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-</body>
-
+  </body>
 </html>
