@@ -11,7 +11,7 @@ export function PageTracker() {
   const pageCountQuery = useChapterPageCounQuery(chapter);
 
   return (
-    <div className="flex items-center text-sm">
+    <div className="flex items-center text-sm transition">
       <PageSelector
         currentPage={page}
         nPages={pageCountQuery.data ?? getMaxPagesForChapter(chapter)}

@@ -22,13 +22,21 @@ export function ChapterSelector() {
   return (
     <div className="relative">
       <GoToChapter />
+
+      {/* Having this many options causes significant transition performance drops, speficially the 'color' transition */}
+      {/* Even parents must not have a color transition as NativeSelect would inherit that */}
+      {/* So, I had to find a hacky solution for that:) Works well enough */}
+      <span className="pointer-events-none absolute top-1/2 left-1/2 z-1 -translate-1/2 text-sm transition">
+        {chapter}
+      </span>
+
       <NativeSelect
         value={chapter}
         onChange={(e) => {
           const selectedChapter = Number(e.target.value);
           navigate({ to: "/", search: { chapter: selectedChapter } });
         }}
-        className="w-15 px-2 py-0 text-center"
+        className="w-15 px-2 py-0 text-center text-transparent transition-[background-color,border-color]"
         showArrow={false}
       >
         {options.map(({ label, value }) => (
