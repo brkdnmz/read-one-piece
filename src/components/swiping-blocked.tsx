@@ -52,7 +52,7 @@ export function SwipingBlocked() {
       {/* Actually MdSwipe but I removed the first path because it was redundant, also messed up the stroke */}
       <svg
         viewBox="0 0 24 24"
-        className="fill-destructive-foreground absolute h-full w-full stroke-black stroke-[0.5]"
+        className="absolute h-full w-full fill-rose-600 stroke-black stroke-[0.5]"
         data-tsd-source="/src/components/swiping-blocked.tsx:47:7"
         xmlns="http://www.w3.org/2000/svg"
       >

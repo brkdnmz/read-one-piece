@@ -4,6 +4,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Header } from "@/components/header";
 import { Subheader } from "@/components/subheader";
 import { SwipingBlocked } from "@/components/swiping-blocked";
+import { Footer } from "@/components/footer";
 
 export const Route = createFileRoute("/(app)")({
   component: RouteComponent,
@@ -21,6 +22,7 @@ function RouteComponent() {
           <main className="flex-1">
             <Outlet />
           </main>
+          <Footer />
         </div>
         <SwipingBlocked />
       </QueryClientProvider>

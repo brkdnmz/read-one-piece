@@ -1,7 +1,7 @@
 export function Credits() {
   return (
     <div className="text-muted-foreground text-2xs text-center italic">
-      (Data obtained from{" "}
+      Data obtained from{" "}
       <a
         href="https://mangabolt.com/manga/one-piece/"
         target="_blank"
@@ -17,7 +17,7 @@ export function Credits() {
       >
         mangadenizi.net
       </a>{" "}
-      (tr))
+      (tr)
     </div>
   );
 }
