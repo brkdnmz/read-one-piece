@@ -121,20 +121,20 @@ export function ChapterReader({
       {pages}
 
       {/* Slide prev */}
-      <div
+      <button
         className="bg-foreground/5 absolute inset-y-0 left-0 z-10 flex w-[10vw] items-center justify-center opacity-0 transition-opacity select-none hover:opacity-100"
         onClick={onSlidePrevPage}
       >
         <img src={OnePieceGun} className="w-1/2" />
-      </div>
+      </button>
 
       {/* Slide next */}
-      <div
+      <button
         className="bg-foreground/5 absolute inset-y-0 right-0 z-10 flex w-[10vw] items-center justify-center opacity-0 transition-opacity select-none hover:opacity-100"
         onClick={onSlideNextPage}
       >
         <img src={OnePieceGun} className="w-1/2 rotate-y-180" />
-      </div>
+      </button>
     </Swiper>
   );
 }
