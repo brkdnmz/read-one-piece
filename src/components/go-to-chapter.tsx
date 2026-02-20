@@ -10,14 +10,15 @@ import {
   InputGroupInput,
 } from "./ui/input-group";
 import type { ChangeEventHandler, FormEventHandler } from "react";
-import { N_CHAPTERS } from "@/constants";
 import OnePieceGun from "/one-piece-gun.png";
+import { useChapterCount } from "@/hooks/use-chapter-count-query";
 
 const route = getRouteApi("/(app)/");
 
 export function GoToChapter() {
   const navigate = useNavigate();
   const { chapter } = route.useSearch();
+  const chapterCount = useChapterCount();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [newChapterInput, setNewChapterInput] = useState(chapter.toString());
 
@@ -32,7 +33,7 @@ export function GoToChapter() {
     e.preventDefault();
     if (!newChapterInput) return;
     const newChapter = Number(newChapterInput);
-    if (newChapter >= 1 && newChapter <= N_CHAPTERS) {
+    if (newChapter >= 1 && newChapter <= chapterCount) {
       navigate({ to: "/", search: { chapter: newChapter } });
       setIsDialogOpen(false);
     }
@@ -60,7 +61,7 @@ export function GoToChapter() {
         <form onSubmit={onSubmit}>
           <Field>
             <FieldLabel htmlFor="new-chapter-input">
-              Chapter (1 - {N_CHAPTERS})
+              Chapter (1 - {chapterCount})
             </FieldLabel>
             <InputGroup>
               <InputGroupInput

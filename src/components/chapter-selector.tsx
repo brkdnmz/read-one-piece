@@ -2,21 +2,22 @@ import { getRouteApi, useNavigate } from "@tanstack/react-router";
 import { useMemo } from "react";
 import { NativeSelect, NativeSelectOption } from "./ui/native-select";
 import { GoToChapter } from "./go-to-chapter";
-import { N_CHAPTERS } from "@/constants";
+import { useChapterCount } from "@/hooks/use-chapter-count-query";
 
 const route = getRouteApi("/(app)/");
 
 export function ChapterSelector() {
   const navigate = useNavigate();
   const { chapter } = route.useSearch();
+  const chapterCount = useChapterCount();
 
   const options = useMemo(
     () =>
-      Array.from({ length: N_CHAPTERS }).map((_, i) => ({
+      Array.from({ length: chapterCount }).map((_, i) => ({
         value: i + 1,
         label: String(i + 1),
       })),
-    [],
+    [chapterCount],
   );
 
   return (

@@ -1,6 +1,17 @@
 import { apiClient } from "./client";
 import { getChapterPageUrl } from "./util";
-import { FIRST_CHAPTER_PAGES, MAX_PAGES_PER_CHAPTER } from "@/constants";
+import {
+  ESTIMATED_CHAPTER_COUNT,
+  FIRST_CHAPTER_PAGES,
+  MAX_PAGES_PER_CHAPTER,
+} from "@/constants";
+
+export async function getChapterCount(): Promise<number> {
+  return await apiClient
+    .get("/chapter-count")
+    .then((res) => res.data.count)
+    .catch(() => ESTIMATED_CHAPTER_COUNT);
+}
 
 export async function getChapterPageCount(chapter: number): Promise<number> {
   if (chapter === 1) {
