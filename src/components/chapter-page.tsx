@@ -43,17 +43,16 @@ export function ChapterPage({ chapter, page, lang, onZoomChange }: Props) {
     // I handle double tap detection here
     const now = Date.now();
     if (now - lastTapRef.current < DOUBLE_TAP_THRESHOLD) {
-      setIsZoomedIn((prev) => !prev);
+      setIsZoomedIn((prev) => {
+        onZoomChange?.(!prev);
+        return !prev;
+      });
       setTapPos([e.clientX, e.clientY]);
       lastTapRef.current = 0; // Triple tap should not equal zoom in + out
     } else {
       lastTapRef.current = now;
     }
   };
-
-  useEffect(() => {
-    onZoomChange?.(isZoomedIn);
-  }, [isZoomedIn, onZoomChange]);
 
   useEffect(() => {
     if (isZoomedIn) {
