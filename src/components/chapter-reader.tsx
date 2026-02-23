@@ -116,7 +116,7 @@ export function ChapterReader({
       }}
       className="h-full touch-auto!"
       wrapperClass="will-change-transform" // this is game changer
-      onSlideChange={onSlideChange}
+      onTransitionEnd={onSlideChange}
     >
       {pages}
 
