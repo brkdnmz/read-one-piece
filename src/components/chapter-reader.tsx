@@ -50,7 +50,6 @@ export function ChapterReader({
         page={pageIndex + 1}
         lang={lang}
         onZoomChange={(isZoomedIn) => {
-          if (!swiperRef.current) return;
           setIsZoomedIn(isZoomedIn);
         }}
       />
@@ -95,11 +94,17 @@ export function ChapterReader({
     swiperRef.current.swiper.allowTouchMove = canSwipe;
   }, [canSwipe]);
 
-  // Slide to the current page when it changes (e.g., via page selector)
-  // I think this will be unnecessarily called on slide changes too, but it's okay (I hope xd)
-  useEffect(() => {
-    swiperRef.current?.swiper.slideTo(currentPage - 1);
-  }, [currentPage]);
+  // When the next chapter has fewer pages, Swiper auto-swiped to the last page,
+  // which overshadowed currentPage reset. (e.g. 670 -> 671)
+  // So, instead of using useEffect, I now do this during rerender to
+  // handle the state correctly before Swiper can interfere.
+  /* eslint-disable react-hooks/refs */
+  if (
+    swiperRef.current &&
+    currentPage - 1 != swiperRef.current.swiper.activeIndex
+  )
+    swiperRef.current.swiper.slideTo(currentPage - 1);
+  /* eslint-enable react-hooks/refs */
 
   return (
     <Swiper
