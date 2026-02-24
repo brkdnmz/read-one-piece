@@ -4,6 +4,7 @@ import { isMobile } from "react-device-detect";
 import type { MangaLanguage } from "@/types";
 import { getChapterPageUrl } from "@/api/util";
 import { cn } from "@/lib/utils";
+import { usePreferredZoomLevel } from "@/store/store";
 
 type Props = {
   chapter: number;
@@ -13,11 +14,12 @@ type Props = {
 };
 
 const DOUBLE_TAP_THRESHOLD = 300;
-const SCALE_FACTOR = 2;
+
 export function ChapterPage({ chapter, page, lang, onZoomChange }: Props) {
   const [isZoomedIn, setIsZoomedIn] = useState(false);
   const [doubleTapPos, setDoubleTapPos] = useState<[number, number]>([0, 0]);
   const [scale, setScale] = useState({ width: 1, height: 1 });
+  const zoomLevel = usePreferredZoomLevel();
 
   const imgContainerRef = useRef<HTMLDivElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
@@ -60,24 +62,25 @@ export function ChapterPage({ chapter, page, lang, onZoomChange }: Props) {
 
       const imgContainerRect = imgContainerRef.current.getBoundingClientRect();
 
-      const prevImgHeight = imgContainerRef.current.scrollHeight / SCALE_FACTOR;
-      const prevImgWidth = imgContainerRef.current.scrollWidth / SCALE_FACTOR;
+      const prevImgHeight = imgContainerRef.current.scrollHeight / zoomLevel;
+      const prevImgWidth = imgContainerRef.current.scrollWidth / zoomLevel;
 
       const leftDiff = (imgContainerRect.width - prevImgWidth) / 2;
       const topDiff = (imgContainerRect.height - prevImgHeight) / 2;
 
       imgContainerRef.current.scrollTo({
         left:
-          (doubleTapPos[0] - imgContainerRect.left) * (scale.width - 1) -
+          (doubleTapPos[0] - (imgContainerRect.left + leftDiff)) *
+            (zoomLevel - 1) -
           leftDiff,
         top:
           (doubleTapPos[1] - (imgContainerRect.top + topDiff)) *
-            (SCALE_FACTOR - 1) -
+            (zoomLevel - 1) -
           topDiff,
         behavior: "instant",
       });
     }
-  }, [isZoomedIn, doubleTapPos, scale.width, scale.height]);
+  }, [isZoomedIn, doubleTapPos, scale.width, scale.height, zoomLevel]);
 
   useEffect(() => {
     if (!isZoomedIn) return;
@@ -92,8 +95,8 @@ export function ChapterPage({ chapter, page, lang, onZoomChange }: Props) {
         imgContainerRef.current.clientHeight;
 
       setScale({
-        width: SCALE_FACTOR / Math.max(1, containerRatio / imgRealRatio),
-        height: SCALE_FACTOR / Math.max(1, imgRealRatio / containerRatio),
+        width: zoomLevel / Math.max(1, containerRatio / imgRealRatio),
+        height: zoomLevel / Math.max(1, imgRealRatio / containerRatio),
       });
     };
 
@@ -104,7 +107,7 @@ export function ChapterPage({ chapter, page, lang, onZoomChange }: Props) {
     return () => {
       observer.disconnect();
     };
-  }, [isZoomedIn]);
+  }, [isZoomedIn, zoomLevel]);
 
   return (
     <div className="flex h-full w-full items-center justify-center select-none">
