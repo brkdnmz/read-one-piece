@@ -2,7 +2,7 @@ import { Keyboard, Navigation, Virtual } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useEffect, useRef } from "react";
 import { getRouteApi } from "@tanstack/react-router";
-import { useAtom, useSetAtom } from "jotai";
+import { useSetAtom } from "jotai";
 import { ChapterPage } from "./chapter-page";
 import { ZoomLevelChanger } from "./zoom-level-changer";
 import type { SwiperEvents } from "swiper/types";
@@ -13,7 +13,7 @@ import { useChapterPageCounQuery } from "@/hooks/use-chapter-page-count-query";
 import { isZoomedInAtom } from "@/store/store";
 import OnePieceGun from "/one-piece-gun.png";
 import { useCanSwipe } from "@/hooks/use-can-swipe";
-import { cn, getMaxPagesForChapter } from "@/lib/utils";
+import { getMaxPagesForChapter } from "@/lib/utils";
 
 const route = getRouteApi("/(app)/");
 
@@ -37,7 +37,7 @@ export function ChapterReader({
   const navigate = route.useNavigate();
   const pageCountQuery = useChapterPageCounQuery(chapter);
   const canSwipe = useCanSwipe();
-  const [isZoomedIn, setIsZoomedIn] = useAtom(isZoomedInAtom);
+  const setIsZoomedIn = useSetAtom(isZoomedInAtom);
 
   const swiperRef = useRef<SwiperRef>(null);
 
@@ -124,12 +124,7 @@ export function ChapterReader({
       wrapperClass="will-change-transform" // this is game changer
       onTransitionEnd={onSlideChange}
     >
-      <div
-        className={cn(
-          "absolute inset-x-0 top-2.5 z-20 flex justify-center transition duration-200",
-          !isZoomedIn && "pointer-events-none opacity-0",
-        )}
-      >
+      <div className="absolute inset-x-0 top-2.5 z-20 flex justify-center transition duration-200">
         <ZoomLevelChanger />
       </div>
 

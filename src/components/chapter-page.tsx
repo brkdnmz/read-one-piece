@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useGesture } from "@use-gesture/react";
 import { isMobile } from "react-device-detect";
 import type { MangaLanguage } from "@/types";
@@ -55,34 +55,36 @@ export function ChapterPage({ chapter, page, lang, onZoomChange }: Props) {
     }
   };
 
+  /*
+    Okay it's a bit confusing why this being useEffect and the other being useLayoutEffect solves the flickering issue.
+    I expected that the other way around would solve it instead, but it won't :D
+  */
   useEffect(() => {
-    if (isZoomedIn) {
-      if (!imgContainerRef.current) return;
-      if (scale.width === 1 && scale.height === 1) return;
+    if (!isZoomedIn) return;
+    if (!imgContainerRef.current) return;
+    if (scale.width === 1 && scale.height === 1) return;
 
-      const imgContainerRect = imgContainerRef.current.getBoundingClientRect();
+    const imgContainerRect = imgContainerRef.current.getBoundingClientRect();
 
-      const prevImgHeight = imgContainerRef.current.scrollHeight / zoomLevel;
-      const prevImgWidth = imgContainerRef.current.scrollWidth / zoomLevel;
+    const prevImgHeight = imgContainerRef.current.scrollHeight / zoomLevel;
+    const prevImgWidth = imgContainerRef.current.scrollWidth / zoomLevel;
 
-      const leftDiff = (imgContainerRect.width - prevImgWidth) / 2;
-      const topDiff = (imgContainerRect.height - prevImgHeight) / 2;
+    const leftDiff = (imgContainerRect.width - prevImgWidth) / 2;
+    const topDiff = (imgContainerRect.height - prevImgHeight) / 2;
 
-      imgContainerRef.current.scrollTo({
-        left:
-          (doubleTapPos[0] - (imgContainerRect.left + leftDiff)) *
-            (zoomLevel - 1) -
-          leftDiff,
-        top:
-          (doubleTapPos[1] - (imgContainerRect.top + topDiff)) *
-            (zoomLevel - 1) -
-          topDiff,
-        behavior: "instant",
-      });
-    }
+    imgContainerRef.current.scrollTo({
+      left:
+        (doubleTapPos[0] - (imgContainerRect.left + leftDiff)) *
+          (zoomLevel - 1) -
+        leftDiff,
+      top:
+        (doubleTapPos[1] - (imgContainerRect.top + topDiff)) * (zoomLevel - 1) -
+        topDiff,
+      behavior: "instant",
+    });
   }, [isZoomedIn, doubleTapPos, scale.width, scale.height, zoomLevel]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!isZoomedIn) return;
 
     const updateScale = () => {
