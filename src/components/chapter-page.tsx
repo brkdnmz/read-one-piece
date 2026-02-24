@@ -14,12 +14,13 @@ type Props = {
 
 const DOUBLE_TAP_THRESHOLD = 300;
 const SCALE_FACTOR = 2;
-
 export function ChapterPage({ chapter, page, lang, onZoomChange }: Props) {
   const [isZoomedIn, setIsZoomedIn] = useState(false);
-  const [doubleTapPos, setTapPos] = useState<[number, number]>([0, 0]);
+  const [doubleTapPos, setDoubleTapPos] = useState<[number, number]>([0, 0]);
+  const [scale, setScale] = useState({ width: 1, height: 1 });
 
   const imgContainerRef = useRef<HTMLDivElement>(null);
+  const imgRef = useRef<HTMLImageElement>(null);
   const lastTapRef = useRef(0);
 
   useGesture(
@@ -43,11 +44,9 @@ export function ChapterPage({ chapter, page, lang, onZoomChange }: Props) {
     // I handle double tap detection here
     const now = Date.now();
     if (now - lastTapRef.current < DOUBLE_TAP_THRESHOLD) {
-      setIsZoomedIn((prev) => {
-        onZoomChange?.(!prev);
-        return !prev;
-      });
-      setTapPos([e.clientX, e.clientY]);
+      setIsZoomedIn((prev) => !prev);
+      onZoomChange?.(!isZoomedIn);
+      setDoubleTapPos([e.clientX, e.clientY]);
       lastTapRef.current = 0; // Triple tap should not equal zoom in + out
     } else {
       lastTapRef.current = now;
@@ -57,24 +56,62 @@ export function ChapterPage({ chapter, page, lang, onZoomChange }: Props) {
   useEffect(() => {
     if (isZoomedIn) {
       if (!imgContainerRef.current) return;
+      if (scale.width === 1 && scale.height === 1) return;
 
       const imgContainerRect = imgContainerRef.current.getBoundingClientRect();
 
-      // Scroll to where the user double tapped
+      const prevImgHeight = imgContainerRef.current.scrollHeight / SCALE_FACTOR;
+      const prevImgWidth = imgContainerRef.current.scrollWidth / SCALE_FACTOR;
+
+      const leftDiff = (imgContainerRect.width - prevImgWidth) / 2;
+      const topDiff = (imgContainerRect.height - prevImgHeight) / 2;
+
       imgContainerRef.current.scrollTo({
-        left: doubleTapPos[0] - imgContainerRect.left,
-        top: doubleTapPos[1] - imgContainerRect.top,
+        left:
+          (doubleTapPos[0] - imgContainerRect.left) * (scale.width - 1) -
+          leftDiff,
+        top:
+          (doubleTapPos[1] - (imgContainerRect.top + topDiff)) *
+            (SCALE_FACTOR - 1) -
+          topDiff,
         behavior: "instant",
       });
     }
-  }, [isZoomedIn, doubleTapPos]);
+  }, [isZoomedIn, doubleTapPos, scale.width, scale.height]);
+
+  useEffect(() => {
+    if (!isZoomedIn) return;
+
+    const updateScale = () => {
+      if (!imgRef.current || !imgContainerRef.current) return;
+
+      const imgRealRatio =
+        imgRef.current.naturalWidth / imgRef.current.naturalHeight;
+      const containerRatio =
+        imgContainerRef.current.clientWidth /
+        imgContainerRef.current.clientHeight;
+
+      setScale({
+        width: SCALE_FACTOR / Math.max(1, containerRatio / imgRealRatio),
+        height: SCALE_FACTOR / Math.max(1, imgRealRatio / containerRatio),
+      });
+    };
+
+    updateScale();
+
+    const observer = new ResizeObserver(updateScale);
+    observer.observe(imgContainerRef.current!);
+    return () => {
+      observer.disconnect();
+    };
+  }, [isZoomedIn]);
 
   return (
     <div className="flex h-full w-full items-center justify-center select-none">
       <div
         ref={imgContainerRef}
         className={cn(
-          "h-full overflow-auto max-sm:w-full",
+          "flex h-full w-full overflow-auto",
           isZoomedIn && "cursor-move overscroll-none", // disable pull-to-refresh when zoomed in
         )}
         onClick={onClickImage}
@@ -83,10 +120,11 @@ export function ChapterPage({ chapter, page, lang, onZoomChange }: Props) {
           key={`chapter-${chapter}-page-${page}-${lang}`}
           src={getChapterPageUrl(chapter, page, lang)}
           alt={`Chapter ${chapter} Page ${page}`}
+          ref={imgRef}
           className="m-auto h-0 min-h-full object-contain"
           style={{
-            minHeight: isZoomedIn ? `${SCALE_FACTOR * 100}%` : undefined,
-            minWidth: isZoomedIn ? `${SCALE_FACTOR * 100}%` : undefined,
+            minHeight: isZoomedIn ? `${scale.height * 100}%` : undefined,
+            minWidth: isZoomedIn ? `${scale.width * 100}%` : undefined,
           }}
           loading="lazy"
           draggable={false}
