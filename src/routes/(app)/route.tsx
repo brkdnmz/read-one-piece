@@ -5,6 +5,7 @@ import { Header } from "@/components/header";
 import { Subheader } from "@/components/subheader";
 import { SwipingBlocked } from "@/components/swiping-blocked";
 import { Footer } from "@/components/footer";
+import { ToggleFullScreen } from "@/components/toggle-full-screen";
 
 export const Route = createFileRoute("/(app)")({
   component: RouteComponent,
@@ -24,6 +25,7 @@ function RouteComponent() {
           </main>
           <Footer />
         </div>
+        <ToggleFullScreen />
         <SwipingBlocked />
       </QueryClientProvider>
     </ThemeProvider>

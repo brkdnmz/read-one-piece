@@ -4,8 +4,9 @@ import z from "zod";
 import { useAtomValue } from "jotai";
 import clsx from "clsx";
 import "swiper/swiper-bundle.css";
-import { languageAtom } from "@/store/store";
+import { isFullScreenAtom, languageAtom } from "@/store/store";
 import { ChapterReader } from "@/components/chapter-reader";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/(app)/")({
   component: App,
@@ -19,6 +20,7 @@ function App() {
   const { chapter, page } = Route.useSearch();
   const navigate = Route.useNavigate();
   const lang = useAtomValue(languageAtom);
+  const isFullScreen = useAtomValue(isFullScreenAtom);
 
   const swiperContainerRef = useRef<HTMLDivElement>(null);
 
@@ -29,7 +31,12 @@ function App() {
       {/* <Await promise={actualPageCount} fallback={<div>Loading...</div>}>
         {(pageCount) => <div>{pageCount}</div>}
       </Await> */}
-      <div className="flex h-full flex-col items-center gap-3">
+      <div
+        className={cn(
+          "flex h-full w-auto flex-col items-center gap-3",
+          isFullScreen && "bg-background absolute inset-0 z-100",
+        )}
+      >
         <div
           ref={swiperContainerRef}
           className={clsx("relative w-full flex-1")}
