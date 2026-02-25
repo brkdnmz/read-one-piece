@@ -1,6 +1,6 @@
 import { Keyboard, Navigation, Virtual } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getRouteApi } from "@tanstack/react-router";
 import { useSetAtom } from "jotai";
 import { ChapterPage } from "./chapter-page";
@@ -36,6 +36,9 @@ export function ChapterReader({
 }: Props) {
   const navigate = route.useNavigate();
   const pageCountQuery = useChapterPageCounQuery(chapter);
+  const [isPageZoomedIn, setIsPageZoomedIn] = useState<Record<number, boolean>>(
+    {},
+  );
   const canSwipe = useCanSwipe();
   const setIsZoomedIn = useSetAtom(isZoomedInAtom);
 
@@ -50,8 +53,12 @@ export function ChapterReader({
         chapter={chapter}
         page={pageIndex + 1}
         lang={lang}
-        onZoomChange={(isZoomedIn) => {
-          setIsZoomedIn(isZoomedIn);
+        isZoomedIn={isPageZoomedIn[pageIndex]}
+        onDoubleTap={() => {
+          setIsPageZoomedIn((prev) => ({
+            ...prev,
+            [pageIndex]: !prev[pageIndex],
+          }));
         }}
       />
     </SwiperSlide>
@@ -81,8 +88,15 @@ export function ChapterReader({
     }
   };
 
+  // reset zoom when chapter or page changes
+  // changing chapter when on page 1 doesn't trigger onSlideChange, but triggers onUpdate,
+  // so have to call this on both events
+  const onSlideChangeOrUpdate = () => {
+    setIsPageZoomedIn({});
+  };
+
   // Swiping is out of my control, I have to synchronize the search param this way I think
-  const onSlideChange: SwiperEvents["slideChange"] = (swiper) => {
+  const onTransitionEnd: SwiperEvents["transitionEnd"] = (swiper) => {
     navigate({
       search: (prev) => ({ ...prev, page: swiper.activeIndex + 1 }),
       replace: true, // more performant
@@ -95,17 +109,28 @@ export function ChapterReader({
     swiperRef.current.swiper.allowTouchMove = canSwipe;
   }, [canSwipe]);
 
+  useEffect(() => {
+    setIsZoomedIn(Object.values(isPageZoomedIn).some(Boolean));
+  }, [isPageZoomedIn, setIsZoomedIn]);
+
   // When the next chapter has fewer pages, Swiper auto-swiped to the last page,
   // which overshadowed currentPage reset. (e.g. 670 -> 671)
   // So, instead of using useEffect, I now do this during rerender to
   // handle the state correctly before Swiper can interfere.
-  /* eslint-disable react-hooks/refs */
-  if (
-    swiperRef.current &&
-    currentPage - 1 != swiperRef.current.swiper.activeIndex
-  )
+
+  // if (prevChapter.current !== chapter) {
+  //   swiperRef.current!.swiper.slideTo(currentPage - 1);
+  //   prevChapter.current = chapter;
+  // }
+
+  // ^ This was not ideal due to some reasons,
+  // using onSlideChangeTransitionEnd instead of onTransitionEnd also solves the issue, so yay
+  // now return back to using useEffect
+
+  useEffect(() => {
+    if (!swiperRef.current) return;
     swiperRef.current.swiper.slideTo(currentPage - 1);
-  /* eslint-enable react-hooks/refs */
+  }, [currentPage]);
 
   return (
     <Swiper
@@ -122,7 +147,9 @@ export function ChapterReader({
       }}
       className="h-full touch-auto!"
       wrapperClass="will-change-transform" // this is game changer
-      onTransitionEnd={onSlideChange}
+      onUpdate={onSlideChangeOrUpdate}
+      onSlideChange={onSlideChangeOrUpdate}
+      onSlideChangeTransitionEnd={onTransitionEnd}
     >
       <div className="absolute inset-x-0 top-2.5 z-20 flex justify-center transition duration-200">
         <ZoomLevelChanger />

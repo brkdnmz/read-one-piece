@@ -10,13 +10,19 @@ type Props = {
   chapter: number;
   page: number;
   lang: MangaLanguage;
-  onZoomChange?: (isZoomedIn: boolean) => void;
+  isZoomedIn?: boolean;
+  onDoubleTap?: () => void;
 };
 
 const DOUBLE_TAP_THRESHOLD = 300;
 
-export function ChapterPage({ chapter, page, lang, onZoomChange }: Props) {
-  const [isZoomedIn, setIsZoomedIn] = useState(false);
+export function ChapterPage({
+  chapter,
+  page,
+  lang,
+  isZoomedIn,
+  onDoubleTap,
+}: Props) {
   const [doubleTapPos, setDoubleTapPos] = useState<[number, number]>([0, 0]);
   const [scale, setScale] = useState({ width: 1, height: 1 });
   const zoomLevel = usePreferredZoomLevel();
@@ -46,10 +52,9 @@ export function ChapterPage({ chapter, page, lang, onZoomChange }: Props) {
     // I handle double tap detection here
     const now = Date.now();
     if (now - lastTapRef.current < DOUBLE_TAP_THRESHOLD) {
-      setIsZoomedIn((prev) => !prev);
-      onZoomChange?.(!isZoomedIn);
       setDoubleTapPos([e.clientX, e.clientY]);
       lastTapRef.current = 0; // Triple tap should not equal zoom in + out
+      onDoubleTap?.();
     } else {
       lastTapRef.current = now;
     }
