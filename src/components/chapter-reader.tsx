@@ -88,11 +88,12 @@ export function ChapterReader({
     }
   };
 
-  // reset zoom when chapter or page changes
-  // changing chapter when on page 1 doesn't trigger onSlideChange, but triggers onUpdate,
-  // so have to call this on both events
-  const onSlideChangeOrUpdate = () => {
+  const resetZoom = () => {
     setIsPageZoomedIn({});
+  };
+
+  const onSlideChange = () => {
+    resetZoom();
   };
 
   // Swiping is out of my control, I have to synchronize the search param this way I think
@@ -112,6 +113,11 @@ export function ChapterReader({
   useEffect(() => {
     setIsZoomedIn(Object.values(isPageZoomedIn).some(Boolean));
   }, [isPageZoomedIn, setIsZoomedIn]);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    resetZoom();
+  }, [chapter]);
 
   // When the next chapter has fewer pages, Swiper auto-swiped to the last page,
   // which overshadowed currentPage reset. (e.g. 670 -> 671)
@@ -147,8 +153,7 @@ export function ChapterReader({
       }}
       className="h-full touch-auto!"
       wrapperClass="will-change-transform" // this is game changer
-      onUpdate={onSlideChangeOrUpdate}
-      onSlideChange={onSlideChangeOrUpdate}
+      onSlideChange={onSlideChange}
       onSlideChangeTransitionEnd={onTransitionEnd}
     >
       <div className="absolute inset-x-0 top-2.5 z-20 flex justify-center transition duration-200">
