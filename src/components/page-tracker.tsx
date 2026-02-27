@@ -11,7 +11,7 @@ export function PageTracker() {
   const pageCountQuery = useChapterPageCounQuery(chapter);
 
   return (
-    <div className="flex items-center text-sm transition">
+    <div className="flex items-center text-sm">
       <PageSelector
         currentPage={page}
         nPages={pageCountQuery.data ?? getMaxPagesForChapter(chapter)}
@@ -19,13 +19,15 @@ export function PageTracker() {
           navigate({ search: (prev) => ({ ...prev, page: newPage }) });
         }}
       />
-      /
-      <span className="w-[2ch]">
-        {pageCountQuery.data ? (
-          pageCountQuery.data
-        ) : (
-          <span className="animate-pulse text-slate-400">...</span>
-        )}
+      <span className="transition">
+        /
+        <span className="w-[2ch]">
+          {pageCountQuery.data ? (
+            pageCountQuery.data
+          ) : (
+            <span className="animate-pulse text-slate-400">...</span>
+          )}
+        </span>
       </span>
     </div>
   );
