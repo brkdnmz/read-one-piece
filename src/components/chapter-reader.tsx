@@ -2,15 +2,7 @@ import { Keyboard, Navigation, Virtual } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useEffect, useRef, useState } from "react";
 import { getRouteApi } from "@tanstack/react-router";
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
-import {
-  AnimatePresence,
-  cubicBezier,
-  easeIn,
-  easeInOut,
-  easeOut,
-  motion,
-} from "motion/react";
+import { useAtom, useAtomValue } from "jotai";
 import { ChapterPage } from "./chapter-page";
 import { ZoomLevelChanger } from "./zoom-level-changer";
 import { FullScreenOverlay } from "./full-screen-overlay";
@@ -23,7 +15,7 @@ import { useChapterPageCounQuery } from "@/hooks/use-chapter-page-count-query";
 import { isFullScreenAtom, isZoomedInAtom } from "@/store/store";
 import OnePieceGun from "/one-piece-gun.png";
 import { useCanSwipe } from "@/hooks/use-can-swipe";
-import { cn, cubicOut, getMaxPagesForChapter } from "@/lib/utils";
+import { cn, getMaxPagesForChapter } from "@/lib/utils";
 
 const route = getRouteApi("/(app)/");
 
