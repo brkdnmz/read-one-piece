@@ -2,18 +2,28 @@ import { Keyboard, Navigation, Virtual } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useEffect, useRef, useState } from "react";
 import { getRouteApi } from "@tanstack/react-router";
-import { useSetAtom } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import {
+  AnimatePresence,
+  cubicBezier,
+  easeIn,
+  easeInOut,
+  easeOut,
+  motion,
+} from "motion/react";
 import { ChapterPage } from "./chapter-page";
 import { ZoomLevelChanger } from "./zoom-level-changer";
+import { FullScreenOverlay } from "./full-screen-overlay";
+import { Fly } from "./fly";
 import type { SwiperEvents } from "swiper/types";
 import type { SwiperClass, SwiperRef } from "swiper/react";
 import type { ComponentProps } from "react";
 import type { MangaLanguage } from "@/types";
 import { useChapterPageCounQuery } from "@/hooks/use-chapter-page-count-query";
-import { isZoomedInAtom } from "@/store/store";
+import { isFullScreenAtom, isZoomedInAtom } from "@/store/store";
 import OnePieceGun from "/one-piece-gun.png";
 import { useCanSwipe } from "@/hooks/use-can-swipe";
-import { getMaxPagesForChapter } from "@/lib/utils";
+import { cn, cubicOut, getMaxPagesForChapter } from "@/lib/utils";
 
 const route = getRouteApi("/(app)/");
 
@@ -40,7 +50,8 @@ export function ChapterReader({
     {},
   );
   const canSwipe = useCanSwipe();
-  const setIsZoomedIn = useSetAtom(isZoomedInAtom);
+  const isFullScreen = useAtomValue(isFullScreenAtom);
+  const [isZoomedIn, setIsZoomedIn] = useAtom(isZoomedInAtom);
 
   const swiperRef = useRef<SwiperRef>(null);
 
@@ -139,44 +150,57 @@ export function ChapterReader({
   }, [currentPage]);
 
   return (
-    <Swiper
-      {...swiperProps}
-      ref={swiperRef}
-      initialSlide={currentPage - 1}
-      lazyPreloadPrevNext={2}
-      allowTouchMove // always allow touch move initially (beware that it seems that it is only used on initialization)
-      modules={[Keyboard, Navigation, Virtual]}
-      keyboard
-      virtual={{
-        addSlidesBefore: 3,
-        addSlidesAfter: 3,
-      }}
-      className="h-full touch-auto!"
-      wrapperClass="will-change-transform" // this is game changer
-      onSlideChange={onSlideChange}
-      onSlideChangeTransitionEnd={onTransitionEnd}
+    <div
+      className={cn(
+        "relative h-full overflow-hidden",
+        isFullScreen && "bg-background absolute inset-0 z-100",
+      )}
     >
-      <div className="absolute inset-x-0 top-2.5 z-20 flex justify-center transition duration-200">
+      <FullScreenOverlay show={isFullScreen} />
+
+      <Fly
+        show={isZoomedIn}
+        from={{ y: "-100%" }}
+        className="pointer-events-none absolute top-2.5 left-1/2 z-20 flex -translate-x-1/2 justify-center *:pointer-events-auto"
+      >
         <ZoomLevelChanger />
-      </div>
+      </Fly>
 
-      {pages}
-
-      {/* Slide prev */}
-      <button
-        className="bg-foreground/5 absolute inset-y-0 left-0 z-10 flex w-[10vw] items-center justify-center opacity-0 transition-opacity select-none hover:opacity-100"
-        onClick={onSlidePrevPage}
+      <Swiper
+        {...swiperProps}
+        ref={swiperRef}
+        initialSlide={currentPage - 1}
+        lazyPreloadPrevNext={2}
+        allowTouchMove // always allow touch move initially (beware that it seems that it is only used on initialization)
+        modules={[Keyboard, Navigation, Virtual]}
+        keyboard
+        virtual={{
+          addSlidesBefore: 3,
+          addSlidesAfter: 3,
+        }}
+        className="h-full touch-auto!"
+        wrapperClass="will-change-transform" // this is game changer
+        onSlideChange={onSlideChange}
+        onSlideChangeTransitionEnd={onTransitionEnd}
       >
-        <img src={OnePieceGun} className="w-1/2" />
-      </button>
+        {pages}
 
-      {/* Slide next */}
-      <button
-        className="bg-foreground/5 absolute inset-y-0 right-0 z-10 flex w-[10vw] items-center justify-center opacity-0 transition-opacity select-none hover:opacity-100"
-        onClick={onSlideNextPage}
-      >
-        <img src={OnePieceGun} className="w-1/2 rotate-y-180" />
-      </button>
-    </Swiper>
+        {/* Slide prev */}
+        <button
+          className="bg-muted/50 absolute inset-y-0 left-0 z-10 flex w-[10vw] items-center justify-center opacity-0 transition-opacity select-none hover:opacity-100"
+          onClick={onSlidePrevPage}
+        >
+          <img src={OnePieceGun} className="w-1/2" />
+        </button>
+
+        {/* Slide next */}
+        <button
+          className="bg-muted/50 absolute inset-y-0 right-0 z-10 flex w-[10vw] items-center justify-center opacity-0 transition-opacity select-none hover:opacity-100"
+          onClick={onSlideNextPage}
+        >
+          <img src={OnePieceGun} className="w-1/2 rotate-y-180" />
+        </button>
+      </Swiper>
+    </div>
   );
 }

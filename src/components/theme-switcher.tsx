@@ -1,9 +1,8 @@
-import { AnimatePresence, motion } from "motion/react";
-import React from "react";
 import { useTheme } from "./theme-provider";
 import { Button } from "./ui/button";
 import SunPiratesJollyRoger from "/sun-pirates-jolly-roger.svg";
 import MoonMoonFruit from "/moon-moon-fruit.webp";
+import { cn } from "@/lib/utils";
 
 export function ThemeSwitcher() {
   const { theme, setTheme } = useTheme();
@@ -21,25 +20,24 @@ export function ThemeSwitcher() {
       size="icon"
       onClick={() => setTheme(theme === "light" ? "dark" : "light")}
       title="Switch theme"
+      className="relative overflow-hidden"
     >
-      <AnimatePresence mode="sync" initial={false}>
-        <motion.div
-          key={effectiveTheme}
-          initial={{ opacity: 0, transform: "scale(0.7)" }}
-          animate={{ opacity: 1, transform: "scale(1)" }}
-          exit={{ opacity: 0, transform: "scale(0.7)" }}
-          transition={{
-            transform: { type: "spring", stiffness: 500, damping: 20 },
-          }}
-          className="absolute"
-        >
-          {effectiveTheme === "light" ? (
-            <img src={SunPiratesJollyRoger} className="h-5" />
-          ) : (
-            <img src={MoonMoonFruit} className="h-5" />
-          )}
-        </motion.div>
-      </AnimatePresence>
+      <img
+        src={SunPiratesJollyRoger}
+        className={cn(
+          "absolute h-5 transition",
+          effectiveTheme === "dark" && "-translate-y-full opacity-0",
+        )}
+        alt="Switch to dark theme"
+      />
+      <img
+        src={MoonMoonFruit}
+        className={cn(
+          "absolute h-5 transition",
+          effectiveTheme === "light" && "translate-y-full opacity-0",
+        )}
+        alt="Switch to light theme"
+      />
     </Button>
   );
 }

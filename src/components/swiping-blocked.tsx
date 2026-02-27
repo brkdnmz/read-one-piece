@@ -1,26 +1,39 @@
-import clsx from "clsx";
-import { useLayoutEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
+import { Fly } from "./fly";
+import { IwwaSwipe } from "./icons/iwwa-swipe";
 import { useCanSwipe } from "@/hooks/use-can-swipe";
 
-const SIZE = 40;
-const PADDING = 10;
+const SIZE = 36;
+const MARGIN = 10;
+const PADDING = 4;
+const BORDER_WIDTH = 1.5;
 
 export function SwipingBlocked() {
   const canSwipe = useCanSwipe();
-  const ref = useRef<HTMLDivElement>(null);
+  const divRef = useRef<HTMLDivElement>(null);
+  const svgRef = useRef<SVGSVGElement>(null);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const onVisualViewportChange = () => {
       const vv = window.visualViewport;
       if (!vv) return;
-      if (!ref.current) return;
+      if (!divRef.current) return;
+      if (!svgRef.current) return;
 
-      const scaledSize = (SIZE * vv.width) / window.innerWidth;
-      const scaledPadding = (PADDING * vv.width) / window.innerWidth;
+      const scaledSize = SIZE / vv.scale;
+      const scaledMargin = MARGIN / vv.scale;
+      const scaledBorder = BORDER_WIDTH / vv.scale;
+      const scaledInnerPadding = PADDING / vv.scale;
+      const scaledStrokeWidth = BORDER_WIDTH / vv.scale;
 
-      ref.current.style.left = `${vv.offsetLeft + vv.width - scaledSize - scaledPadding}px`;
-      ref.current.style.top = `${vv.offsetTop + vv.height - scaledSize - scaledPadding}px`;
-      ref.current.style.width = `${scaledSize}px`;
+      divRef.current.style.margin = `${scaledMargin}px`;
+      divRef.current.style.left = `${vv.offsetLeft + vv.width - scaledSize - 2 * scaledMargin}px`;
+      divRef.current.style.top = `${vv.offsetTop}px`;
+      divRef.current.style.width = `${scaledSize}px`;
+      divRef.current.style.height = `${scaledSize}px`;
+      divRef.current.style.borderWidth = `${scaledBorder}px`;
+      divRef.current.style.padding = `${scaledInnerPadding}px`;
+      svgRef.current.style.strokeWidth = `${scaledStrokeWidth}px`;
     };
 
     onVisualViewportChange();
@@ -38,27 +51,30 @@ export function SwipingBlocked() {
         onVisualViewportChange,
       );
     };
-  }, []);
+  }, [canSwipe]);
 
   return (
-    // z-index is large so that it appears above Tanstack Devtools
-    <div
-      ref={ref}
-      className={clsx(
-        "pointer-events-none fixed z-100000 aspect-square rounded-full opacity-0 transition-opacity duration-250",
-        !canSwipe && "opacity-100",
-      )}
+    <Fly
+      ref={divRef}
+      show={!canSwipe}
+      from={{ x: "100%", y: "-100%" }}
+      className="bg-background/50 pointer-events-none fixed z-1000 overflow-hidden rounded-full border-rose-600 transition-[background-color]"
     >
-      {/* Actually MdSwipe but I removed the first path because it was redundant, also messed up the stroke */}
       <svg
-        viewBox="0 0 24 24"
-        className="absolute h-full w-full fill-rose-600 stroke-black stroke-[0.5]"
-        data-tsd-source="/src/components/swiping-blocked.tsx:47:7"
-        xmlns="http://www.w3.org/2000/svg"
+        ref={svgRef}
+        className="absolute inset-0 h-full w-full stroke-rose-600"
+        viewBox="0 0 1 1"
       >
-        <path d="m18.89 14.75-4.09-2.04c-.28-.14-.58-.21-.89-.21H13v-6c0-.83-.67-1.5-1.5-1.5S10 5.67 10 6.5v10.74l-3.25-.74a.99.99 0 0 0-.92.28l-.83.84 4.54 4.79c.38.38 1.14.59 1.67.59h6.16c1 0 1.84-.73 1.98-1.72l.63-4.46c.12-.85-.32-1.68-1.09-2.07z"></path>
-        <path d="M20.13 3.87C18.69 2.17 15.6 1 12 1S5.31 2.17 3.87 3.87L2 2v5h5L4.93 4.93c1-1.29 3.7-2.43 7.07-2.43s6.07 1.14 7.07 2.43L17 7h5V2l-1.87 1.87z"></path>
+        <line
+          x1="0"
+          y1="100%"
+          x2="100%"
+          y2="0"
+          vectorEffect="non-scaling-stroke"
+        />
       </svg>
-    </div>
+
+      <IwwaSwipe className="h-full w-full transition" />
+    </Fly>
   );
 }

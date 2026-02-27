@@ -17,7 +17,7 @@ export function ZoomLevelChanger() {
     <Button
       variant="outline"
       className={cn(
-        "bg-background/40! text-2xs aspect-square size-8! rounded-full border-slate-600! p-2",
+        "bg-background/50! text-2xs aspect-square rounded-full p-0",
         !isZoomedIn && "pointer-events-none opacity-0",
       )}
       onClick={() => {

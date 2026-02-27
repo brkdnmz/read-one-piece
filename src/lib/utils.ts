@@ -10,3 +10,8 @@ export function cn(...inputs: Array<ClassValue>) {
 export function getMaxPagesForChapter(chapter: number) {
   return chapter === 1 ? FIRST_CHAPTER_PAGES : MAX_PAGES_PER_CHAPTER;
 }
+
+// Svelte's fly transition uses this easing
+export function cubicOut(t: number) {
+  return 1 - (1 - t) ** 3;
+}

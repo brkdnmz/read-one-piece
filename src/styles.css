@@ -128,6 +128,7 @@
   body {
     @apply bg-background text-foreground;
     @apply transition-[background-color]; /* Should not set 'color' transition to avoid "chapter select"-caused performance drop */
+    @apply touch-manipulation; /* Especially for iOS, disable double tap to zoom, causes unwanted stuff */
   }
 
   /* What the hell why do I have to do this myself: https://github.com/shadcn-ui/ui/issues/6843 */

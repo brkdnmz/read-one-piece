@@ -15,6 +15,7 @@ export function PageSelector({ currentPage, nPages, onChoosePage }: Props) {
         onChoosePage(selectedPage);
       }}
       className="w-[calc(2ch+1rem)] px-2 py-0 text-center"
+      style={{ textAlignLast: "center" }} // About "text-align-last: center": https://stackoverflow.com/questions/11182559/text-align-is-not-working-on-safari-select
       showArrow={false}
     >
       {Array.from({ length: nPages }).map((_, i) => (
