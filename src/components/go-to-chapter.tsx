@@ -47,15 +47,18 @@ export function GoToChapter() {
         setIsDialogOpen(open);
       }}
     >
-      <DialogTrigger asChild>
-        <Button
-          className="absolute inset-x-0 top-full mt-1 h-fit py-1 text-center text-xs italic"
-          variant="secondary"
-          size="xs"
-        >
-          Go to...
-        </Button>
-      </DialogTrigger>
+      <DialogTrigger
+        render={
+          <Button
+            className="absolute inset-x-0 top-full mt-1 h-fit py-1 text-center text-xs italic"
+            variant="secondary"
+            size="xs"
+          >
+            Go to...
+          </Button>
+        }
+      />
+
       <DialogContent aria-describedby={undefined}>
         <DialogTitle>Go to...</DialogTitle>
         <form onSubmit={onSubmit}>
