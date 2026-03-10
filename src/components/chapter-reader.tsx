@@ -53,6 +53,7 @@ export function ChapterReader({
   const isFullScreen = useAtomValue(isFullScreenAtom);
   const [isZoomedIn, setIsZoomedIn] = useAtom(isZoomedInAtom);
 
+  const [swiper, setSwiper] = useState<SwiperClass>(); // used at wherever state is needed instead of ref
   const swiperRef = useRef<SwiperRef>(null);
 
   const pageCount = useMemo(
@@ -130,7 +131,7 @@ export function ChapterReader({
     swiperProps?.onSlideChange?.(swiper);
   };
 
-  useReaderGestures(swiperRef, {
+  useReaderGestures(swiper, {
     onTap: () => setShowOverlayUI((prev) => !prev),
   });
 
@@ -173,8 +174,6 @@ export function ChapterReader({
       replace: true,
     });
   }, [navigate, pageCount]);
-
-  const [swiper, setSwiper] = useState<SwiperClass>();
 
   useEffect(() => {
     document.querySelectorAll(".swiper-slide").forEach((slideEl) => {

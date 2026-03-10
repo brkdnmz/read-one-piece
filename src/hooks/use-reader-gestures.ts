@@ -1,10 +1,9 @@
 import { useEffect, useRef } from "react";
-import type { SwiperRef } from "swiper/react";
-import type { RefObject } from "react";
+import type { SwiperClass } from "swiper/react";
 import { DOUBLE_TAP_THRESHOLD_MS } from "@/constants";
 
 export function useReaderGestures(
-  readerContainerRef: RefObject<SwiperRef | null>,
+  swiper: SwiperClass | undefined,
   events: {
     onTap?: () => void;
     onDoubleTap?: () => void;
@@ -17,7 +16,6 @@ export function useReaderGestures(
   }, [events]);
 
   useEffect(() => {
-    const swiper = readerContainerRef.current?.swiper;
     if (!swiper) return;
     let lastTap = 0;
     let tapTimeout = 0;
@@ -42,5 +40,5 @@ export function useReaderGestures(
     return () => {
       swiper.off("click", onClick);
     };
-  }, [readerContainerRef]);
+  }, [swiper]);
 }
