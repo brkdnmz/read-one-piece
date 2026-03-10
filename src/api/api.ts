@@ -1,10 +1,10 @@
-import { apiClient } from "./client";
-import { getChapterPageUrl } from "./util";
 import {
   ESTIMATED_CHAPTER_COUNT,
   FIRST_CHAPTER_PAGES,
   MAX_PAGES_PER_CHAPTER,
-} from "@/constants";
+} from "../constants";
+import { MangaLanguage } from "../types";
+import { apiClient } from "./client";
 
 export async function getChapterCount(): Promise<number> {
   return await apiClient
@@ -13,27 +13,19 @@ export async function getChapterCount(): Promise<number> {
     .catch(() => ESTIMATED_CHAPTER_COUNT);
 }
 
-export async function getChapterPageCount(chapter: number): Promise<number> {
-  if (chapter === 1) {
+export async function getChapterPageCount(
+  chapter: number,
+  lang: MangaLanguage,
+): Promise<number> {
+  if (chapter === 1 && lang === MangaLanguage.EN) {
     return FIRST_CHAPTER_PAGES;
   }
 
-  let l = 0;
-  let r = MAX_PAGES_PER_CHAPTER - 1;
-
-  while (l < r) {
-    const mid = Math.floor((l + r + 1) / 2);
-    const pageUrl = getChapterPageUrl(chapter, mid + 1);
-
-    // I don't want it to throw error for any status code
-    const res = await apiClient.head(pageUrl, { validateStatus: () => true });
-
-    if (res.status === 404) {
-      r = mid - 1;
-    } else {
-      l = mid;
-    }
-  }
-
-  return l + 1;
+  return await apiClient
+    .get("/page-count", {
+      // I require the page param also, don't you dare question
+      params: { chapter, page: 1, lang },
+    })
+    .then((res) => res.data.count - +(lang === MangaLanguage.TR))
+    .catch(() => MAX_PAGES_PER_CHAPTER);
 }

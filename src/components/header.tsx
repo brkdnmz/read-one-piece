@@ -1,4 +1,4 @@
-import LogoLeftPart from "/read-one-piece-font.png";
+import LogoLeftPart from "/read-one-piece-font.webp";
 import LogoRightPart from "/one-piece-logo.webp";
 
 export function Header() {

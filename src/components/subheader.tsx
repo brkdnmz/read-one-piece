@@ -1,42 +1,44 @@
 import { ThemeSwitcher } from "./theme-switcher";
-import { PrevChapterButton } from "./prev-chapter-button";
-import { NextChapterButton } from "./next-chapter-button";
 import { ChapterSelector } from "./chapter-selector";
 import { PageTracker } from "./page-tracker";
 import ChapterText from "/chapter-text-2.png";
 import PageText from "/page-text-2.png";
 import { LangSwitcher } from "./lang-switcher";
+import { ChapterNavigationButton } from "./chapter-navigation-button";
+import { About } from "./about";
+import { OrientationSwitcher } from "./orientation-switcher";
 
 export function Subheader() {
   return (
-    <div className="grid gap-8">
-      {/* pb-5 for "Go to..." button */}
-      <div className="flex items-stretch justify-center gap-3 pb-5 font-[One_Piece] select-none">
-        <div className="flex items-center gap-2">
+    /* pb-5 for "Go to..." button */
+    <div className="flex flex-wrap-reverse items-stretch justify-center gap-x-2 gap-y-1 pb-5 font-[One_Piece] select-none">
+      <div className="flex items-stretch justify-center gap-2">
+        <div className="flex items-center gap-1">
           {/* "Chapter" text in One Piece style */}
-          <img src={ChapterText} className="h-5" />
+          <img src={ChapterText} className="h-5" alt="Chapter" />
 
           <div className="flex">
-            <PrevChapterButton />
+            <ChapterNavigationButton direction="prev" />
 
             <ChapterSelector />
 
-            <NextChapterButton />
+            <ChapterNavigationButton direction="next" />
           </div>
         </div>
 
         <div className="flex items-center gap-1">
           {/* "Page" text in One Piece style */}
-          <img src={PageText} className="-mb-0.5 inline h-4.5" />
+          <img src={PageText} className="-mb-px inline h-4.5" alt="Page" />
 
           <PageTracker />
         </div>
+      </div>
 
-        <div className="flex items-center gap-1">
-          <ThemeSwitcher />
-
-          <LangSwitcher />
-        </div>
+      <div className="flex items-center gap-1">
+        <ThemeSwitcher />
+        <LangSwitcher />
+        <OrientationSwitcher />
+        <About />
       </div>
     </div>
   );

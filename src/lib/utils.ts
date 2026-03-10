@@ -15,3 +15,7 @@ export function getMaxPagesForChapter(chapter: number) {
 export function cubicOut(t: number) {
   return 1 - (1 - t) ** 3;
 }
+
+export function preloadImage(src: string) {
+  new Image().src = src;
+}

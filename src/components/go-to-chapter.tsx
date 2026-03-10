@@ -10,7 +10,7 @@ import {
   InputGroupInput,
 } from "./ui/input-group";
 import type { ChangeEventHandler, FormEventHandler } from "react";
-import OnePieceGun from "/one-piece-gun.png";
+import OnePieceGun from "/one-piece-gun.webp";
 import { useChapterCount } from "@/hooks/use-chapter-count-query";
 
 const route = getRouteApi("/(app)/");
@@ -50,7 +50,7 @@ export function GoToChapter() {
       <DialogTrigger
         render={
           <Button
-            className="absolute inset-x-0 top-full mt-1 h-fit py-1 text-center text-xs italic"
+            className="absolute -inset-x-1 top-full mt-1 h-fit py-1 text-center text-xs italic"
             variant="secondary"
             size="xs"
           >

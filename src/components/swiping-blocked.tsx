@@ -20,11 +20,13 @@ export function SwipingBlocked() {
       if (!divRef.current) return;
       if (!svgRef.current) return;
 
-      const scaledSize = SIZE / vv.scale;
-      const scaledMargin = MARGIN / vv.scale;
-      const scaledBorder = BORDER_WIDTH / vv.scale;
-      const scaledInnerPadding = PADDING / vv.scale;
-      const scaledStrokeWidth = BORDER_WIDTH / vv.scale;
+      const scale = window.outerWidth / vv.width;
+
+      const scaledSize = SIZE / scale;
+      const scaledMargin = MARGIN / scale;
+      const scaledBorder = BORDER_WIDTH / scale;
+      const scaledInnerPadding = PADDING / scale;
+      const scaledStrokeWidth = BORDER_WIDTH / scale;
 
       divRef.current.style.margin = `${scaledMargin}px`;
       divRef.current.style.left = `${vv.offsetLeft + vv.width - scaledSize - 2 * scaledMargin}px`;
@@ -58,7 +60,7 @@ export function SwipingBlocked() {
       ref={divRef}
       show={!canSwipe}
       from={{ x: "100%", y: "-100%" }}
-      className="bg-background/50 pointer-events-none fixed z-1000 overflow-hidden rounded-full border-rose-600 transition-[background-color]"
+      className="bg-background/50 pointer-events-none fixed z-100 overflow-hidden rounded-full border-rose-600 transition-[background-color]"
     >
       <svg
         ref={svgRef}

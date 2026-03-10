@@ -17,14 +17,14 @@ export function Fly({
   ...restProps
 }: Props) {
   return (
-    <AnimatePresence>
+    <AnimatePresence initial={false}>
       {show && (
         <motion.div
           {...restProps}
           initial={animateIn ? { opacity: 0, ...from } : undefined}
           animate={{ opacity: 1, x: 0, y: 0 }}
           exit={animateOut ? { opacity: 0, ...from } : undefined}
-          transition={{ type: "keyframes", duration: 0.2, ease: cubicOut }}
+          transition={{ type: "keyframes", duration: 0.4, ease: cubicOut }}
         />
       )}
     </AnimatePresence>

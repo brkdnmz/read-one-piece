@@ -15,7 +15,6 @@ export function FullScreenOverlay({ show }: Props) {
     <Fly
       show={show}
       from={{ y: "100%" }}
-      animateOut={false}
       className="bg-background/50 absolute bottom-2 left-1/2 z-100 flex -translate-x-1/2 items-center gap-2 rounded-lg px-1 py-0.5 font-[One_Piece] text-sm"
     >
       <div className="flex items-center gap-1">

@@ -1,14 +1,17 @@
 import { getRouteApi } from "@tanstack/react-router";
+import { useAtomValue } from "jotai";
 import { PageSelector } from "./page-selector";
 import { useChapterPageCounQuery } from "@/hooks/use-chapter-page-count-query";
 import { getMaxPagesForChapter } from "@/lib/utils";
+import { languageAtom } from "@/store/store";
 
 const route = getRouteApi("/(app)/");
 
 export function PageTracker() {
   const { chapter, page } = route.useSearch();
   const navigate = route.useNavigate();
-  const pageCountQuery = useChapterPageCounQuery(chapter);
+  const lang = useAtomValue(languageAtom);
+  const pageCountQuery = useChapterPageCounQuery(chapter, lang);
 
   return (
     <div className="flex items-center text-sm">
@@ -21,7 +24,7 @@ export function PageTracker() {
       />
       <span className="transition">
         /
-        <span className="w-[2ch]">
+        <span className="inline-block w-[2ch]">
           {pageCountQuery.data ? (
             pageCountQuery.data
           ) : (

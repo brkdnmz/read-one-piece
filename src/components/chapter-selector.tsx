@@ -37,7 +37,7 @@ export function ChapterSelector() {
           const selectedChapter = Number(e.target.value);
           navigate({ to: "/", search: { chapter: selectedChapter } });
         }}
-        className="w-15 px-2 py-0 text-center text-transparent transition-[background-color,border-color]"
+        className="w-fit px-2 py-0 text-center text-transparent transition-[background-color,border-color]"
         showArrow={false}
       >
         {options.map(({ label, value }) => (
