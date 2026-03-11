@@ -1,7 +1,7 @@
 # Read One Piece
 
 <p align="center">
-  <img width="50%" alt="App screenshot" src="https://github.com/user-attachments/assets/f88b683b-92d6-4b88-943b-6190798f602d" />
+  <img width="50%" alt="App screenshot" src="https://github.com/user-attachments/assets/525606c9-ed09-40c8-a559-fdd73977086b" />
 </p>
 
 After a journey that I wasn't expecting to be this long, this place here deserves some details:
