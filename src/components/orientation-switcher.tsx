@@ -19,7 +19,7 @@ export function OrientationSwitcher() {
     >
       <span
         className={cn(
-          "icon-[solar--posts-carousel-horizontal-line-duotone] size-1/2 transition",
+          "icon-[solar--posts-carousel-horizontal-line-duotone] size-1/2 transition-[background-color,transform]",
           orientation === "vertical" && "rotate-z-90",
         )}
       />
