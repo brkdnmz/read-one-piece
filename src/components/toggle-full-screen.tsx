@@ -22,13 +22,13 @@ export function ToggleFullScreen() {
         <div className="relative">
           <BsFullscreen
             className={cn(
-              "absolute inset-0 size-full transition duration-200",
+              "absolute inset-0 size-full transition-opacity duration-200",
               isFullScreen && "opacity-0",
             )}
           />
           <BsFullscreenExit
             className={cn(
-              "absolute inset-0 size-full transition duration-200",
+              "absolute inset-0 size-full transition-opacity duration-200",
               !isFullScreen && "opacity-0",
             )}
           />
