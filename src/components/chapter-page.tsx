@@ -1,19 +1,11 @@
-import {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { useCallback, useLayoutEffect, useMemo, useRef } from "react";
 import { useDrag } from "@use-gesture/react";
 import { isMobile } from "react-device-detect";
+import { ChapterPageImage } from "./chapter-page-image";
 import type { MangaLanguage } from "@/types";
-import { getChapterPageUrl } from "@/api/util";
 import { cn } from "@/lib/utils";
 import { usePreferredZoomLevel } from "@/store/store";
 import { DOUBLE_TAP_THRESHOLD_MS } from "@/constants";
-import LuffyRunningAnimation from "/luffy-running-animation.webp";
 
 type Props = {
   chapter: number;
@@ -37,7 +29,6 @@ export function ChapterPage({
     () => (isZoomedIn ? preferredZoomLevel : 1),
     [isZoomedIn, preferredZoomLevel],
   );
-  const [imgLoaded, setImgLoaded] = useState(false);
 
   const imgContainerRef = useRef<HTMLDivElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
@@ -114,10 +105,6 @@ export function ChapterPage({
     },
     [onDoubleClickImage],
   );
-
-  useEffect(() => {
-    setImgLoaded(false);
-  }, [chapter, page, isColored, lang]);
 
   useLayoutEffect(() => {
     const scrollAfterScale = () => {
@@ -201,25 +188,13 @@ export function ChapterPage({
           }, 100);
         }}
       >
-        <img
-          key={`chapter-${chapter}-page-${page}-${lang}-${isColored}`}
-          src={getChapterPageUrl(chapter, page, lang, isColored)}
-          alt={`Chapter ${chapter} Page ${page}`}
-          ref={imgRef}
-          className="m-auto h-0 min-h-full object-contain"
-          loading="lazy"
-          draggable={false}
-          onLoad={() => setImgLoaded(true)}
-          onError={() => setImgLoaded(true)}
+        <ChapterPageImage
+          imgRef={imgRef}
+          chapter={chapter}
+          page={page}
+          lang={lang}
+          isColored={isColored}
         />
-
-        {!imgLoaded && (
-          <img
-            src={LuffyRunningAnimation}
-            alt="Loading..."
-            className="absolute top-1/2 left-1/2 h-16 -translate-1/2"
-          />
-        )}
       </div>
     </div>
   );
