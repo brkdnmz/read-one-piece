@@ -7,6 +7,7 @@ import { LangSwitcher } from "./lang-switcher";
 import { ChapterNavigationButton } from "./chapter-navigation-button";
 import { About } from "./about";
 import { OrientationSwitcher } from "./orientation-switcher";
+import { ColoredSwitcher } from "./colored-switcher";
 
 export function Subheader() {
   return (
@@ -36,6 +37,7 @@ export function Subheader() {
 
       <div className="flex items-center gap-1">
         <ThemeSwitcher />
+        <ColoredSwitcher />
         <LangSwitcher />
         <OrientationSwitcher />
         <About />

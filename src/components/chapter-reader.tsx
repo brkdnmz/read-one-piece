@@ -15,6 +15,7 @@ import type { ComponentProps } from "react";
 import type { MangaLanguage } from "@/types";
 import { useChapterPageCounQuery } from "@/hooks/use-chapter-page-count-query";
 import {
+  isColoredAtom,
   isFullScreenAtom,
   isZoomedInAtom,
   orientationAtom,
@@ -50,6 +51,7 @@ export function ChapterReader({
   const [showOverlayUI, setShowOverlayUI] = useState(true);
   const canSwipe = useCanSwipe();
   const orientation = useAtomValue(orientationAtom);
+  const isColored = useAtomValue(isColoredAtom);
   const isFullScreen = useAtomValue(isFullScreenAtom);
   const [isZoomedIn, setIsZoomedIn] = useAtom(isZoomedInAtom);
 
@@ -77,6 +79,7 @@ export function ChapterReader({
             chapter={chapter}
             page={pageIndex + 1}
             lang={lang}
+            isColored={isColored}
             isZoomedIn={isPageZoomedIn[pageIndex]}
             onDoubleTap={() => {
               setIsPageZoomedIn((prev) => ({
@@ -87,7 +90,7 @@ export function ChapterReader({
           />
         </SwiperSlide>
       )),
-    [chapter, isPageZoomedIn, lang, pageCount],
+    [chapter, isColored, isPageZoomedIn, lang, pageCount],
   );
 
   const onSlidePrevPage = () => {

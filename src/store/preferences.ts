@@ -5,6 +5,7 @@ import { MangaLanguage } from "@/types";
 type PreferencesStore = {
   preferredMangaLanguage: MangaLanguage;
   preferredOrientation: Orientation;
+  isColoredPreferred: boolean;
   useFullscreenApi: boolean;
 };
 
@@ -13,6 +14,7 @@ export const preferencesAtom = atomWithStorage<PreferencesStore>(
   {
     preferredMangaLanguage: MangaLanguage.EN,
     preferredOrientation: "horizontal",
+    isColoredPreferred: false,
     useFullscreenApi: false,
   },
   undefined,

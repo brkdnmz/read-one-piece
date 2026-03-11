@@ -1,4 +1,4 @@
-import { useAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
 import { useId } from "react";
 import { Button } from "./ui/button";
 import {
@@ -23,10 +23,11 @@ import { Checkbox } from "./ui/checkbox";
 import type { Orientation } from "@/types";
 import { preferencesAtom } from "@/store/preferences";
 import { MangaLanguage } from "@/types";
-import { orientationAtom } from "@/store/store";
+import { isColoredAtom, orientationAtom } from "@/store/store";
 
 export function Settings() {
-  const [orientation, setOrientation] = useAtom(orientationAtom);
+  const setOrientation = useSetAtom(orientationAtom);
+  const setIsColored = useSetAtom(isColoredAtom);
   const [preferences, setPreferences] = useAtom(preferencesAtom);
   const uid = useId();
 
@@ -93,6 +94,24 @@ export function Settings() {
             >
               <option value="horizontal">Horizontal</option>
               <option value="vertical">Vertical</option>
+            </NativeSelect>
+          </Field>
+          <Field>
+            <FieldLabel>Preferred manga color</FieldLabel>
+            <NativeSelect
+              value={
+                preferences.isColoredPreferred ? "colored" : "black-and-white"
+              }
+              onChange={(e) => {
+                setPreferences((prev) => ({
+                  ...prev,
+                  isColoredPreferred: e.target.value === "colored",
+                }));
+                setIsColored(e.target.value === "colored");
+              }}
+            >
+              <option value="black-and-white">Black & white</option>
+              <option value="colored">Colored</option>
             </NativeSelect>
           </Field>
           <FieldSeparator />

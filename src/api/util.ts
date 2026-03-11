@@ -5,6 +5,7 @@ export function getChapterPageUrl(
   chapter: number,
   page: number,
   lang: MangaLanguage = MangaLanguage.EN,
+  isColored: boolean = false,
 ): string {
   switch (lang) {
     case MangaLanguage.EN: {
@@ -19,6 +20,7 @@ export function getChapterPageUrl(
 
       url.searchParams.append("chapter", chapter.toString());
       url.searchParams.append("page", page.toString());
+      url.searchParams.append("colored", `${isColored}`);
 
       return url.toString();
     }

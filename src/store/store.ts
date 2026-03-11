@@ -11,6 +11,9 @@ export const languageAtom = atom<MangaLanguage>(
 export const orientationAtom = atom(
   store.get(preferencesAtom).preferredOrientation,
 );
+export const isColoredAtom = atom(
+  store.get(preferencesAtom).isColoredPreferred,
+);
 export const isZoomedInAtom = atom(false); // not native zoom, but the page zoom
 export const isFullScreenAtom = atom(false);
 export const preferredZoomLevelIndexAtom = atom(

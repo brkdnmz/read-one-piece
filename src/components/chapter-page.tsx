@@ -19,6 +19,7 @@ type Props = {
   chapter: number;
   page: number;
   lang: MangaLanguage;
+  isColored?: boolean;
   isZoomedIn?: boolean;
   onDoubleTap?: () => void;
 };
@@ -27,6 +28,7 @@ export function ChapterPage({
   chapter,
   page,
   lang,
+  isColored,
   isZoomedIn,
   onDoubleTap,
 }: Props) {
@@ -115,7 +117,7 @@ export function ChapterPage({
 
   useEffect(() => {
     setImgLoaded(false);
-  }, [chapter, page, lang]);
+  }, [chapter, page, isColored, lang]);
 
   useLayoutEffect(() => {
     const scrollAfterScale = () => {
@@ -179,7 +181,7 @@ export function ChapterPage({
       observer.disconnect();
       imgEl?.removeEventListener("load", updateScale);
     };
-  }, [isZoomedIn, recalculateZoomOriginPos, zoomLevel, lang]);
+  }, [isZoomedIn, recalculateZoomOriginPos, zoomLevel, lang, isColored]);
 
   return (
     <div className="flex h-full w-full items-center justify-center select-none">
@@ -200,8 +202,8 @@ export function ChapterPage({
         }}
       >
         <img
-          key={`chapter-${chapter}-page-${page}-${lang}`}
-          src={getChapterPageUrl(chapter, page, lang)}
+          key={`chapter-${chapter}-page-${page}-${lang}-${isColored}`}
+          src={getChapterPageUrl(chapter, page, lang, isColored)}
           alt={`Chapter ${chapter} Page ${page}`}
           ref={imgRef}
           className="m-auto h-0 min-h-full object-contain"
