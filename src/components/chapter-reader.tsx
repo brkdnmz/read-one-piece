@@ -63,7 +63,6 @@ export function ChapterReader({
     [chapter, pageCountQuery.data],
   );
 
-  // got annoyed by the useMemo warning, React Compiler does its job anyway
   const pages = useMemo(
     () =>
       Array.from({
@@ -185,7 +184,7 @@ export function ChapterReader({
       if (!imgSrc) return;
       preloadImage(imgSrc);
     });
-  }, [chapter, currentPage, lang, pageCount, swiper]);
+  }, [chapter, currentPage, lang, isColored, pageCount, swiper]);
 
   return (
     <div
