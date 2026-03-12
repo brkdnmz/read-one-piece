@@ -44,16 +44,16 @@ export function ChapterReader({
   onSlideNextLastPage,
 }: Props) {
   const navigate = route.useNavigate();
-  const pageCountQuery = useChapterPageCounQuery(chapter, lang);
   const [isPageZoomedIn, setIsPageZoomedIn] = useState<Record<number, boolean>>(
     {},
   );
   const [showOverlayUI, setShowOverlayUI] = useState(true);
   const canSwipe = useCanSwipe();
-  const orientation = useAtomValue(orientationAtom);
   const isColored = useAtomValue(isColoredAtom);
+  const orientation = useAtomValue(orientationAtom);
   const isFullScreen = useAtomValue(isFullScreenAtom);
   const [isZoomedIn, setIsZoomedIn] = useAtom(isZoomedInAtom);
+  const pageCountQuery = useChapterPageCounQuery(chapter, lang, isColored);
 
   const [swiper, setSwiper] = useState<SwiperClass>(); // used at wherever state is needed instead of ref
   const swiperRef = useRef<SwiperRef>(null);

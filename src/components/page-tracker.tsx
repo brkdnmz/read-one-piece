@@ -3,7 +3,7 @@ import { useAtomValue } from "jotai";
 import { PageSelector } from "./page-selector";
 import { useChapterPageCounQuery } from "@/hooks/use-chapter-page-count-query";
 import { getMaxPagesForChapter } from "@/lib/utils";
-import { languageAtom } from "@/store/store";
+import { isColoredAtom, languageAtom } from "@/store/store";
 
 const route = getRouteApi("/(app)/");
 
@@ -11,7 +11,8 @@ export function PageTracker() {
   const { chapter, page } = route.useSearch();
   const navigate = route.useNavigate();
   const lang = useAtomValue(languageAtom);
-  const pageCountQuery = useChapterPageCounQuery(chapter, lang);
+  const isColored = useAtomValue(isColoredAtom);
+  const pageCountQuery = useChapterPageCounQuery(chapter, lang, isColored);
 
   return (
     <div className="flex items-center text-sm">
