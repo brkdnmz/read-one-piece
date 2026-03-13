@@ -16,11 +16,10 @@ import { useChapterCount } from "@/hooks/use-chapter-count-query";
 const route = getRouteApi("/(app)/");
 
 export function GoToChapter() {
-  const navigate = useNavigate();
-  const { chapter } = route.useSearch();
+  const navigate = route.useNavigate();
   const chapterCount = useChapterCount();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [newChapterInput, setNewChapterInput] = useState(chapter.toString());
+  const [newChapterInput, setNewChapterInput] = useState("");
 
   const onChangeInput: ChangeEventHandler<HTMLInputElement> = (e) => {
     let input = e.target.value;
@@ -34,7 +33,7 @@ export function GoToChapter() {
     if (!newChapterInput) return;
     const newChapter = Number(newChapterInput);
     if (newChapter >= 1 && newChapter <= chapterCount) {
-      navigate({ to: "/", search: { chapter: newChapter } });
+      navigate({ search: { chapter: newChapter } });
       setIsDialogOpen(false);
     }
   };
@@ -43,7 +42,7 @@ export function GoToChapter() {
     <Dialog
       open={isDialogOpen}
       onOpenChange={(open) => {
-        setNewChapterInput(chapter.toString());
+        setNewChapterInput("");
         setIsDialogOpen(open);
       }}
     >
