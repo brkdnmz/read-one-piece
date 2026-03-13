@@ -18,7 +18,7 @@ import {
   FieldSeparator,
 } from "./ui/field";
 import { NativeSelect } from "./ui/native-select";
-import ShipWheel from "/ship-wheel.png";
+import ShipWheel from "/ship-wheel.webp";
 import { Checkbox } from "./ui/checkbox";
 import type { Orientation } from "@/types";
 import { preferencesAtom } from "@/store/preferences";

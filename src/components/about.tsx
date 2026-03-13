@@ -16,7 +16,7 @@ import { IwwaSwipe } from "./icons/iwwa-swipe";
 import { Kbd, KbdGroup } from "./ui/kbd";
 import { cn } from "@/lib/utils";
 import { aboutReadBeforeAtom } from "@/store/store";
-import FrankySuper from "/franky-super.png";
+import FrankySuper from "/franky-super.webp";
 
 export function About() {
   const [aboutReadBefore, setAboutReadBefore] = useAtom(aboutReadBeforeAtom);
