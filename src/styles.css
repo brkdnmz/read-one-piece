@@ -120,6 +120,9 @@
 }
 
 @theme {
+  --font-one-piece: "One Piece";
+  --font-manga: "Anime Ace";
+
   --text-2xs: 0.625rem;
   --text-2xs--line-height: calc(0.75 / 0.625);
 
@@ -147,11 +150,6 @@
   }
 }
 
-@font-face {
-  font-family: "One Piece";
-  src: url("/one-piece-font.ttf");
-}
-
 .about-not-read {
   animation: scale 1s ease-in-out infinite;
   filter: drop-shadow(0 0 10px yellow);
@@ -165,6 +163,11 @@
   50% {
     transform: scale(1.2);
   }
+}
+
+@font-face {
+  font-family: "One Piece";
+  src: url("/one-piece-font.ttf");
 }
 
 @font-face {

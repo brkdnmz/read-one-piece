@@ -12,7 +12,7 @@ import { ColoredSwitcher } from "./colored-switcher";
 export function Subheader() {
   return (
     /* pb-5 for "Go to..." button */
-    <div className="flex flex-wrap-reverse items-stretch justify-center gap-x-2 gap-y-1 pb-5 font-[One_Piece] select-none">
+    <div className="font-one-piece flex flex-wrap-reverse items-stretch justify-center gap-x-2 gap-y-1 pb-5 select-none">
       <div className="flex items-stretch justify-center gap-2">
         <div className="flex items-center gap-1">
           {/* "Chapter" text in One Piece style */}

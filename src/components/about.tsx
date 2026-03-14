@@ -50,11 +50,9 @@ export function About() {
       />
       <DialogContent>
         <DialogHeader>
-          <DialogTitle className="text-center font-[Anime_Ace]">
-            About
-          </DialogTitle>
+          <DialogTitle className="font-manga text-center">About</DialogTitle>
           <DialogDescription className="italic">
-            Hope you have <span className="font-[Anime_Ace]">SUUUUPER</span>{" "}
+            Hope you have <span className="font-manga">SUUUUPER</span>{" "}
             <img
               src={FrankySuper}
               alt="Franky Super Pose"
@@ -117,9 +115,7 @@ export function About() {
           <DialogClose
             render={
               // https://github.com/dcastil/tailwind-merge/blob/main/docs/limitations.md#you-need-to-use-labels-in-ambiguous-arbitrary-value-classes
-              <Button className="font-[family-name:Anime_Ace] font-bold">
-                Gotcha!
-              </Button>
+              <Button className="font-manga font-bold">Gotcha!</Button>
             }
           />
         </DialogFooter>

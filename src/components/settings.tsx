@@ -54,9 +54,7 @@ export function Settings() {
       />
       <DialogContent initialFocus={false}>
         <DialogHeader>
-          <DialogTitle className="text-center font-[Anime_Ace]">
-            Settings
-          </DialogTitle>
+          <DialogTitle className="font-manga text-center">Settings</DialogTitle>
         </DialogHeader>
 
         <FieldGroup>
@@ -142,7 +140,7 @@ export function Settings() {
           <DialogClose
             render={
               // https://github.com/dcastil/tailwind-merge/blob/main/docs/limitations.md#you-need-to-use-labels-in-ambiguous-arbitrary-value-classes
-              <Button className="text-2xs font-[family-name:Anime_Ace] font-bold">
+              <Button className="text-2xs font-manga font-bold">
                 I'm done!
               </Button>
             }
