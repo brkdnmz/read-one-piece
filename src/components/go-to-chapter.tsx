@@ -1,7 +1,13 @@
 import { getRouteApi, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { Button } from "./ui/button";
-import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "./ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "./ui/dialog";
 import { Field, FieldLabel } from "./ui/field";
 import {
   InputGroup,
@@ -59,7 +65,9 @@ export function GoToChapter() {
       />
 
       <DialogContent aria-describedby={undefined}>
-        <DialogTitle>Go to...</DialogTitle>
+        <DialogHeader>
+          <DialogTitle className="font-manga text-center">Go to...</DialogTitle>
+        </DialogHeader>
         <form onSubmit={onSubmit}>
           <Field>
             <FieldLabel htmlFor="new-chapter-input">
